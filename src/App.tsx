@@ -63,7 +63,7 @@ function App() {
   const [filters, setFilters] = useState<Filters>(FILTROS_PADRAO)
 
   useEffect(() => {
-    fetch('/empresas.json')
+    fetch(`${import.meta.env.BASE_URL}empresas.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
@@ -71,7 +71,7 @@ function App() {
       .then(setPayload)
       .catch((e) => setErro(String(e)))
 
-    fetch('/custo_folha.json')
+    fetch(`${import.meta.env.BASE_URL}custo_folha.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
@@ -79,7 +79,7 @@ function App() {
       .then(setCustoPayload)
       .catch(() => {})
 
-    fetch('/provisao.json')
+    fetch(`${import.meta.env.BASE_URL}provisao.json`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`)
         return r.json()
