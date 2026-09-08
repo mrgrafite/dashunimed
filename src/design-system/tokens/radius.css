@@ -1,0 +1,16 @@
+/* Ali — Border radius tokens.
+   Friendly-but-professional: medium rounding, never pill-shaped cards. */
+
+:root {
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;   /* controls, inputs, buttons */
+  --radius-lg: 12px;  /* cards */
+  --radius-xl: 16px;  /* panels, modals */
+  --radius-2xl: 20px; /* hero / marketing surfaces */
+  --radius-pill: 999px;
+
+  --radius-control: var(--radius-md);
+  --radius-card: var(--radius-lg);
+}

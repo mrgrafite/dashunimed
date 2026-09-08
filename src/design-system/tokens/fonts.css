@@ -1,0 +1,11 @@
+/* Ali — Webfonts
+   NOTE (substitution flag): No brand font files were provided in the source
+   proposal. These Google Fonts are a deliberate, documented choice:
+   - Plus Jakarta Sans — geometric humanist sans for display + UI. Friendly,
+     modern, professional; reads well in dense data tables (tabular figures).
+   - JetBrains Mono — monospace for figures, IDs, código and CNPJ/valores
+     where column alignment matters.
+   If you have licensed brand fonts, drop the .woff2 files in assets/fonts/ and
+   replace the @import below with local @font-face rules. */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap');

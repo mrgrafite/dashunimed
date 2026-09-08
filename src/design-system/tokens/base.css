@@ -1,0 +1,51 @@
+/* Ali — Base element defaults.
+   Minimal, opt-in resets so consuming surfaces inherit the brand voice.
+   Tokens above must load first. */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--lh-normal);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  color: var(--text-strong);
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--lh-snug);
+  text-wrap: balance;
+}
+
+p { margin: 0; text-wrap: pretty; }
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: var(--transition-colors);
+}
+a:hover { color: var(--text-link-hover); }
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+::selection { background: var(--teal-200); color: var(--teal-900); }
+
+/* Utility for tabular money figures */
+.tabular { font-variant-numeric: tabular-nums lining-nums; }

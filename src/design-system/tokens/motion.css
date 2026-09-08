@@ -1,0 +1,49 @@
+/* Ali — Motion tokens.
+   Quick, confident, no bounce. Functional easing for a productivity tool.
+   Standard exit/entrance use a soft decelerate; hovers are near-instant. */
+
+:root {
+  --duration-instant: 80ms; /* @kind other */
+  --duration-fast: 120ms; /* @kind other */
+  --duration-base: 180ms; /* @kind other */
+  --duration-slow: 240ms; /* @kind other */
+  --duration-slower: 360ms; /* @kind other */
+
+  /* Easing */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in: cubic-bezier(0.5, 0, 0.84, 0); /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+
+  /* Common composite transitions */
+  --transition-colors: color var(--duration-fast) var(--ease-standard),
+                        background-color var(--duration-fast) var(--ease-standard),
+                        border-color var(--duration-fast) var(--ease-standard); /* @kind other */
+  --transition-control: background-color var(--duration-fast) var(--ease-standard),
+                        border-color var(--duration-fast) var(--ease-standard),
+                        box-shadow var(--duration-fast) var(--ease-standard),
+                        transform var(--duration-fast) var(--ease-standard); /* @kind other */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms; /* @kind other */
+    --duration-fast: 0ms; /* @kind other */
+    --duration-base: 0ms; /* @kind other */
+    --duration-slow: 0ms; /* @kind other */
+    --duration-slower: 0ms; /* @kind other */
+  }
+}
+
+/* ---- Shared keyframes for loading states ---- */
+@keyframes ali-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes ali-spin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Skeletons hold a static tint instead of shimmering */
+  [data-ali-skeleton] { animation: none !important; }
+}

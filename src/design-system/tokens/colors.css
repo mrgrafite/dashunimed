@@ -1,0 +1,156 @@
+/* Ali — Color tokens
+   Base palettes (raw scales) + semantic aliases.
+   Brand: Azul Ali (corporate blue, from the ALI Tecnologia logo) = trust, tech, stability.
+   Accent: Azure (a brighter blue) = highlights, "new" pips, secondary emphasis.
+   Neutrals: slate grays — the same cool slate as the "ALI" wordmark.
+   NOTE: the --teal-* and --amber-* tokens are kept as DEPRECATED ALIASES of the
+   blue/azure scales so existing component code keeps working; new code should use
+   --blue-*, --accent, and the semantic aliases below. */
+
+:root {
+  /* ---- Brand: Azul Ali ---- */
+  --blue-50:  #EEF4FA;
+  --blue-100: #D6E5F2;
+  --blue-200: #AECCE6;
+  --blue-300: #7FAED6;
+  --blue-400: #5390C4;
+  --blue-500: #3B7CB4;
+  --blue-600: #3370A8;  /* brand — matches the logo "i" accent */
+  --blue-700: #2A5C8A;
+  --blue-800: #234A6E;
+  --blue-900: #1E3E5B;
+  --blue-950: #142838;
+
+  /* ---- Accent: Azure (brighter blue) ---- */
+  --azure-50:  #E9F3FC;
+  --azure-100: #CFE6FA;
+  --azure-200: #A6CFF3;
+  --azure-300: #6FB0EA;
+  --azure-400: #3D95E0;  /* accent */
+  --azure-500: #2E86D6;
+  --azure-600: #2473BE;
+  --azure-700: #1F619E;
+
+  /* ---- Deprecated aliases (old teal brand → blue) ---- */
+  --teal-50:  var(--blue-50);
+  --teal-100: var(--blue-100);
+  --teal-200: var(--blue-200);
+  --teal-300: var(--blue-300);
+  --teal-400: var(--blue-400);
+  --teal-500: var(--blue-500);
+  --teal-600: var(--blue-600);
+  --teal-700: var(--blue-700);
+  --teal-800: var(--blue-800);
+  --teal-900: var(--blue-900);
+  --teal-950: var(--blue-950);
+
+  /* ---- Deprecated aliases (old amber accent → azure) ---- */
+  --amber-50:  var(--azure-50);
+  --amber-100: var(--azure-100);
+  --amber-200: var(--azure-200);
+  --amber-300: var(--azure-300);
+  --amber-400: var(--azure-400);
+  --amber-500: var(--azure-500);
+  --amber-600: var(--azure-600);
+  --amber-700: var(--azure-700);
+
+  /* ---- Neutrals: Slate ---- */
+  --neutral-0:   #FFFFFF;
+  --neutral-50:  #F7F9FA;
+  --neutral-100: #EEF1F4;
+  --neutral-200: #E1E6EB;
+  --neutral-300: #CBD3DB;
+  --neutral-400: #9AA7B2;
+  --neutral-500: #6B7884;
+  --neutral-600: #4D5963;
+  --neutral-700: #38424B;
+  --neutral-800: #232C34;
+  --neutral-900: #141B21;
+  --neutral-950: #0C1115;
+
+  /* ---- Semantic palettes ---- */
+  --success-50:  #E7F6ED;
+  --success-100: #C6EAD3;
+  --success-500: #16A34A;
+  --success-600: #138A3F;
+  --success-700: #0F6E32;
+
+  --danger-50:  #FDECEC;
+  --danger-100: #F9D2D2;
+  --danger-500: #DC2626;
+  --danger-600: #BE1D1D;
+  --danger-700: #9B1717;
+
+  --warning-50:  #FEF4E6;
+  --warning-100: #FCE3BE;
+  --warning-500: #D97706;
+  --warning-600: #B86305;
+
+  --info-50:  #EAF1FE;
+  --info-100: #CBDCFB;
+  --info-500: #2563EB;
+  --info-600: #1E4FC4;
+
+  /* ============================================================
+     SEMANTIC ALIASES — use these in product code, not raw scales
+     ============================================================ */
+
+  /* Text */
+  --text-strong:   var(--neutral-900);
+  --text-body:     var(--neutral-700);
+  --text-muted:    var(--neutral-500);
+  --text-faint:    var(--neutral-400);
+  --text-on-brand: #FFFFFF;
+  --text-on-accent: #FFFFFF;
+  --text-link:     var(--blue-600);
+  --text-link-hover: var(--blue-700);
+
+  /* Surfaces */
+  --surface-page:    var(--neutral-50);
+  --surface-card:    var(--neutral-0);
+  --surface-sunken:  var(--neutral-100);
+  --surface-hover:   var(--neutral-100);
+  --surface-inverse: var(--neutral-900);
+  --surface-brand:   var(--blue-600);
+  --surface-brand-soft: var(--blue-50);
+  --surface-accent-soft: var(--azure-50);
+
+  /* Borders */
+  --border-subtle:  var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong:  var(--neutral-400);
+  --border-brand:   var(--blue-600);
+
+  /* Brand interactive */
+  --brand:        var(--blue-600);
+  --brand-hover:  var(--blue-700);
+  --brand-active: var(--blue-800);
+  --brand-soft:   var(--blue-50);
+  --brand-ring:   color-mix(in srgb, var(--blue-600) 32%, transparent);
+
+  /* Accent (azure) */
+  --accent:       var(--azure-400);
+  --accent-hover: var(--azure-500);
+  --accent-soft:  var(--azure-50);
+
+  /* Semantic intent */
+  --success:      var(--success-500);
+  --success-soft: var(--success-50);
+  --danger:       var(--danger-500);
+  --danger-soft:  var(--danger-50);
+  --warning:      var(--warning-500);
+  --warning-soft: var(--warning-50);
+  --info:         var(--info-500);
+  --info-soft:    var(--info-50);
+
+  /* Data-viz categorical (charts) */
+  --chart-1: var(--blue-600);
+  --chart-2: var(--warning-500);
+  --chart-3: var(--info-500);
+  --chart-4: var(--success-500);
+  --chart-5: #7C5CFC;
+  --chart-6: var(--neutral-400);
+
+  /* Focus */
+  --focus-ring: 0 0 0 3px var(--brand-ring);
+}
