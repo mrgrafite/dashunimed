@@ -64,10 +64,14 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   const totalRescisao = rescisao.reduce((s, v) => s + v, 0)
   const totalGeral = totalFolha + totalEncargos + totalBeneficio + totalRescisao
 
+  // CLC vem da contabilizacao real (bronze_rhp_r048ctb), que cobre os 12 meses cheios -
+  // ao contrario de folha/encargos/beneficio/rescisao (silver, so a partir de Jan/2026),
+  // por isso fatia por `12 - nMeses` direto, sem o corte de `inicioJanela`/`primeiroMesComDado`.
+  const inicioJanelaClc = 12 - nMeses
   const clcMap = new Map<string, number>()
   emps.forEach((e) =>
     e.clc.forEach((c) => {
-      const soma = c.valores.slice(inicioJanela).reduce((s, v) => s + v, 0)
+      const soma = c.valores.slice(inicioJanelaClc).reduce((s, v) => s + v, 0)
       clcMap.set(c.nome, (clcMap.get(c.nome) ?? 0) + soma)
     })
   )
@@ -184,7 +188,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
         )}
       </Card>
 
-      <Card title="Custo de folha por classificação (CLC)" subtitle={`${labels.length} meses · só dentro de "Folha" (a categoria com detalhamento mais rico) — ver Encargos/Benefícios/Rescisão nos KPIs acima`}>
+      <Card title="Custo de folha por classificação (CLC)" subtitle={`${nMeses} meses · contabilização real (lançamentos a débito) · fonte: bronze_rhp_r048ctb + r048clc`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxHeight: 480, overflow: 'auto' }}>
           {clcList.map((c) => (
             <BarRow key={c.nome} label={c.nome} valueLabel={brl(c.valor)} fraction={c.valor / maxClc} />
