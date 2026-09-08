@@ -23,40 +23,36 @@ const OPCOES_GRAFICO: [TipoGrafico, string][] = [
 
 const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
-function variacaoMensal(valores: number[]): string {
-  if (valores.length < 2) return ''
-  const atual = valores[valores.length - 1]
-  const anterior = valores[valores.length - 2]
-  if (!anterior) return ''
-  const pct = ((atual - anterior) / anterior) * 100
-  const sinal = pct >= 0 ? '+' : ''
-  return `${sinal}${pct.toFixed(1)}% vs mês anterior`
-}
-
 const OPCOES_MESES = [3, 6, 12]
+type ModoPeriodo = 'meses' | 'especifico'
 
 export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolhaPayload; provisaoPayload: ProvisaoPayload | null }) {
   const [empresaSel, setEmpresaSel] = useState<string[]>([])
   const [nMeses, setNMeses] = useState(12)
+  const [modoPeriodo, setModoPeriodo] = useState<ModoPeriodo>('meses')
+  const [mesEspecificoIdx, setMesEspecificoIdx] = useState(payload.meses.length - 1)
   const [tipoGrafico, setTipoGrafico] = useState<TipoGrafico>('empilhado')
 
   const empresaOptions = payload.empresas.map((e) => ({ value: e.id, label: e.nome }))
   const emps = payload.empresas.filter((e) => empresaSel.length === 0 || empresaSel.includes(e.id))
 
+  // "Mes especifico" (pedido do Marcelo 2026-09-08, 4a opcao de Periodo): reduz a janela a
+  // 1 unico indice (mesEspecificoIdx) em vez de uma faixa de N meses - todo o resto da aba
+  // (KPIs, grafico, CLC, Provisao) usa os MESMOS `indices` computados aqui, entao passa a
+  // refletir so aquele mes automaticamente.
   const inicioJanela = Math.max(12 - nMeses, payload.primeiroMesComDado)
-  const labels = payload.meses.slice(inicioJanela)
-  const cobreturaLimitada = inicioJanela > 12 - nMeses
+  const indices = modoPeriodo === 'especifico' ? [mesEspecificoIdx] : Array.from({ length: Math.max(0, 12 - inicioJanela) }, (_, i) => inicioJanela + i)
+  const labels = indices.map((i) => payload.meses[i])
+  const cobreturaLimitada = modoPeriodo === 'meses' && inicioJanela > 12 - nMeses
+  const semDadoMesEspecifico = modoPeriodo === 'especifico' && mesEspecificoIdx < payload.primeiroMesComDado
 
-  const folha = new Array(labels.length).fill(0)
-  const encargos = new Array(labels.length).fill(0)
-  const beneficio = new Array(labels.length).fill(0)
-  const rescisao = new Array(labels.length).fill(0)
-  emps.forEach((e) => {
-    e.historico.folha.slice(inicioJanela).forEach((v, i) => (folha[i] += v))
-    e.historico.encargos.slice(inicioJanela).forEach((v, i) => (encargos[i] += v))
-    e.historico.beneficio.slice(inicioJanela).forEach((v, i) => (beneficio[i] += v))
-    e.historico.rescisao.slice(inicioJanela).forEach((v, i) => (rescisao[i] += v))
-  })
+  const totalNoIndice = (campo: 'folha' | 'encargos' | 'beneficio' | 'rescisao', idx: number) =>
+    idx < 0 ? 0 : emps.reduce((s, e) => s + e.historico[campo][idx], 0)
+
+  const folha = indices.map((idx) => emps.reduce((s, e) => s + e.historico.folha[idx], 0))
+  const encargos = indices.map((idx) => emps.reduce((s, e) => s + e.historico.encargos[idx], 0))
+  const beneficio = indices.map((idx) => emps.reduce((s, e) => s + e.historico.beneficio[idx], 0))
+  const rescisao = indices.map((idx) => emps.reduce((s, e) => s + e.historico.rescisao[idx], 0))
 
   const totalFolha = folha.reduce((s, v) => s + v, 0)
   const totalEncargos = encargos.reduce((s, v) => s + v, 0)
@@ -64,14 +60,29 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   const totalRescisao = rescisao.reduce((s, v) => s + v, 0)
   const totalGeral = totalFolha + totalEncargos + totalBeneficio + totalRescisao
 
+  // Variacao "vs mes anterior" compara sempre o ULTIMO mes da selecao contra o mes
+  // imediatamente antes dele no calendario (nao contra o inicio da janela) - assim funciona
+  // igual em qualquer tamanho de janela, inclusive no modo "mes especifico" (1 so indice).
+  const idxUltimo = indices[indices.length - 1] ?? -1
+  const idxAnterior = idxUltimo - 1
+  const variacao = (campo: 'folha' | 'encargos' | 'beneficio' | 'rescisao') => {
+    const atual = totalNoIndice(campo, idxUltimo)
+    const anterior = totalNoIndice(campo, idxAnterior)
+    if (!anterior) return ''
+    const pct = ((atual - anterior) / anterior) * 100
+    const sinal = pct >= 0 ? '+' : ''
+    return `${sinal}${pct.toFixed(1)}% vs mês anterior`
+  }
+
   // CLC vem da contabilizacao real (bronze_rhp_r048ctb), que cobre os 12 meses cheios -
   // ao contrario de folha/encargos/beneficio/rescisao (silver, so a partir de Jan/2026),
-  // por isso fatia por `12 - nMeses` direto, sem o corte de `inicioJanela`/`primeiroMesComDado`.
-  const inicioJanelaClc = 12 - nMeses
+  // por isso usa os mesmos `indices` (ja sem o corte de `inicioJanela`/`primeiroMesComDado`
+  // no modo "meses", e o mesmo mes unico no modo "especifico").
+  const indicesClc = modoPeriodo === 'especifico' ? [mesEspecificoIdx] : Array.from({ length: nMeses }, (_, i) => 12 - nMeses + i)
   const clcMap = new Map<string, number>()
   emps.forEach((e) =>
     e.clc.forEach((c) => {
-      const soma = c.valores.slice(inicioJanelaClc).reduce((s, v) => s + v, 0)
+      const soma = indicesClc.reduce((s, idx) => s + c.valores[idx], 0)
       clcMap.set(c.nome, (clcMap.get(c.nome) ?? 0) + soma)
     })
   )
@@ -80,18 +91,15 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
 
   // Provisao de Ferias/13o/PLR (pedido 2026-09-08, resolvido com a chegada de
   // bronze_rhp_r146prv) - fonte separada do custo_folha, cobre os 12 meses completos (sem o
-  // corte de Jan/2026 que a silver tem), por isso usa `payload.meses` (nao `labels`, que ja
-  // vem cortado por `primeiroMesComDado` do custo). `sldatu` e saldo acumulado (ponto no
-  // tempo) - o "saldo atual" do KPI usa so o ULTIMO mes da janela, nao soma.
-  const labelsProvisao = payload.meses.slice(12 - nMeses)
+  // corte de Jan/2026 que a silver tem), por isso usa os mesmos `indicesClc` (mesma logica de
+  // janela cheia). `sldatu` e saldo acumulado (ponto no tempo) - o "saldo atual" do KPI usa
+  // so o ULTIMO mes da janela (ou o mes especifico escolhido), nunca soma.
+  const labelsProvisao = indicesClc.map((i) => payload.meses[i])
   const empsProvisao = (provisaoPayload?.empresas ?? []).filter((e) => empresaSel.length === 0 || empresaSel.includes(e.id))
   const tipos = provisaoPayload?.tipos ?? []
   const saldoPorTipoMensal = new Map<string, number[]>()
   tipos.forEach((tipo) => {
-    const serie = new Array(labelsProvisao.length).fill(0)
-    empsProvisao.forEach((e) => {
-      e.provisao[tipo]?.sldatu.slice(12 - nMeses).forEach((v, i) => (serie[i] += v))
-    })
+    const serie = indicesClc.map((idx) => empsProvisao.reduce((s, e) => s + (e.provisao[tipo]?.sldatu[idx] ?? 0), 0))
     saldoPorTipoMensal.set(tipo, serie)
   })
   const saldoAtualPorTipo = new Map<string, number>()
@@ -106,22 +114,54 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
         <MultiSelect label="Empresa" values={empresaSel} options={empresaOptions} onChange={setEmpresaSel} width={220} placeholderTodos="Todas as empresas" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <span style={{ font: 'var(--fw-medium) var(--text-caption)/1 var(--font-sans)', color: 'var(--text-muted)' }}>Período</span>
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {OPCOES_MESES.map((m) => (
               <button
                 key={m}
-                onClick={() => setNMeses(m)}
+                onClick={() => {
+                  setModoPeriodo('meses')
+                  setNMeses(m)
+                }}
                 style={{
                   height: 36, padding: '0 14px', borderRadius: 'var(--radius-control)',
-                  border: m === nMeses ? '1px solid var(--brand)' : '1px solid var(--border-subtle)',
-                  background: m === nMeses ? 'var(--brand-soft)' : 'var(--surface-card)',
-                  color: m === nMeses ? 'var(--brand)' : 'var(--text-body)',
+                  border: modoPeriodo === 'meses' && m === nMeses ? '1px solid var(--brand)' : '1px solid var(--border-subtle)',
+                  background: modoPeriodo === 'meses' && m === nMeses ? 'var(--brand-soft)' : 'var(--surface-card)',
+                  color: modoPeriodo === 'meses' && m === nMeses ? 'var(--brand)' : 'var(--text-body)',
                   font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
                 }}
               >
                 {m} meses
               </button>
             ))}
+            <button
+              onClick={() => setModoPeriodo('especifico')}
+              style={{
+                height: 36, padding: '0 14px', borderRadius: 'var(--radius-control)',
+                border: modoPeriodo === 'especifico' ? '1px solid var(--brand)' : '1px solid var(--border-subtle)',
+                background: modoPeriodo === 'especifico' ? 'var(--brand-soft)' : 'var(--surface-card)',
+                color: modoPeriodo === 'especifico' ? 'var(--brand)' : 'var(--text-body)',
+                font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
+              }}
+            >
+              Mês específico
+            </button>
+            {modoPeriodo === 'especifico' && (
+              <select
+                value={mesEspecificoIdx}
+                onChange={(e) => setMesEspecificoIdx(Number(e.target.value))}
+                style={{
+                  height: 36, padding: '0 10px', borderRadius: 'var(--radius-control)',
+                  border: '1px solid var(--border-subtle)', background: 'var(--surface-card)',
+                  color: 'var(--text-strong)', font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
+                }}
+              >
+                {payload.meses.map((m, i) => (
+                  <option key={m} value={i}>
+                    {m}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         </div>
       </div>
@@ -131,17 +171,22 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
           Dado de custo de folha só está disponível a partir de {payload.meses[payload.primeiroMesComDado]} — período ajustado automaticamente.
         </div>
       )}
+      {semDadoMesEspecifico && (
+        <div style={{ font: 'var(--fw-medium) var(--text-body-sm)/1.4 var(--font-sans)', color: 'var(--warning)', background: 'var(--surface-card)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-card)', padding: '10px 16px' }}>
+          Custo de folha (Folha/Encargos/Benefícios/Rescisão) sem dado para {payload.meses[mesEspecificoIdx]} — a fonte só cobre a partir de {payload.meses[payload.primeiroMesComDado]}. A quebra por CLC abaixo cobre esse mês normalmente (fonte diferente).
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-        <StatCard label="Custo de folha" value={brl(totalFolha)} hint={variacaoMensal(folha)} icon={<Wallet size={18} strokeWidth={1.75} />} />
-        <StatCard label="Encargos" value={brl(totalEncargos)} hint={variacaoMensal(encargos)} icon={<Landmark size={18} strokeWidth={1.75} />} />
-        <StatCard label="Benefícios" value={brl(totalBeneficio)} hint={variacaoMensal(beneficio)} icon={<HeartHandshake size={18} strokeWidth={1.75} />} />
-        <StatCard label="Rescisão" value={brl(totalRescisao)} hint={variacaoMensal(rescisao)} icon={<DoorOpen size={18} strokeWidth={1.75} />} />
+        <StatCard label="Custo de folha" value={brl(totalFolha)} hint={variacao('folha')} icon={<Wallet size={18} strokeWidth={1.75} />} />
+        <StatCard label="Encargos" value={brl(totalEncargos)} hint={variacao('encargos')} icon={<Landmark size={18} strokeWidth={1.75} />} />
+        <StatCard label="Benefícios" value={brl(totalBeneficio)} hint={variacao('beneficio')} icon={<HeartHandshake size={18} strokeWidth={1.75} />} />
+        <StatCard label="Rescisão" value={brl(totalRescisao)} hint={variacao('rescisao')} icon={<DoorOpen size={18} strokeWidth={1.75} />} />
       </div>
 
       <Card
         title="Custo total de pessoal"
-        subtitle={`${labels.length} meses · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado`}
+        subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labels.length} meses`} · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado`}
         right={
           <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
             Total do período · <span className="tabular" style={{ color: 'var(--text-strong)', fontWeight: 600 }}>{brl(totalGeral)}</span>
@@ -188,7 +233,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
         )}
       </Card>
 
-      <Card title="Custo de folha por classificação (CLC)" subtitle={`${nMeses} meses · contabilização real (lançamentos a débito) · fonte: bronze_rhp_r048ctb + r048clc`}>
+      <Card title="Custo de folha por classificação (CLC)" subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${nMeses} meses`} · contabilização real (lançamentos a débito) · fonte: bronze_rhp_r048ctb + r048clc`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxHeight: 480, overflow: 'auto' }}>
           {clcList.map((c) => (
             <BarRow key={c.nome} label={c.nome} valueLabel={brl(c.valor)} fraction={c.valor / maxClc} />
@@ -213,7 +258,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
 
           <Card
             title="Provisão de Férias/13º/PLR"
-            subtitle={`${labelsProvisao.length} meses · saldo acumulado (não é custo mensal, é o passivo provisionado) · fonte: bronze_rhp_r146prv, módulo de Provisão`}
+            subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labelsProvisao.length} meses`} · saldo acumulado (não é custo mensal, é o passivo provisionado) · fonte: bronze_rhp_r146prv, módulo de Provisão`}
           >
             <ProvisaoChart
               meses={labelsProvisao}
