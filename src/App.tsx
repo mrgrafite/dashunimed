@@ -11,6 +11,7 @@ import { EmpresaGenericTable } from './components/EmpresaGenericTable'
 import { ContratoWidget } from './components/ContratoWidget'
 import { MultiSelect } from './components/MultiSelect'
 import { PeriodoFilter } from './components/PeriodoFilter'
+import { PeriodoBotoes } from './components/PeriodoBotoes'
 import { CustoFolhaTab } from './components/CustoFolhaTab'
 import type { Payload, Filters, Colaborador, Empresa, EventoContrato, CustoFolhaPayload, ProvisaoPayload } from './types'
 
@@ -518,7 +519,7 @@ function App() {
       <>
       <div style={{ background: 'var(--surface-card)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-card)', boxShadow: 'var(--shadow-sm)', padding: '16px 20px', display: 'flex', alignItems: 'flex-end', gap: 14, flexWrap: 'wrap' }}>
         <MultiSelect label="Empresa" values={filters.empresa} options={derivado.empresaOptionsMulti} onChange={(v) => setFilter('empresa', v)} width={220} placeholderTodos="Todas as empresas" />
-        <PeriodoFilter
+        <PeriodoBotoes
           modo={filters.periodoModo}
           meses={filters.periodoMeses}
           inicio={filters.periodoInicio}
