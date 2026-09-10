@@ -526,6 +526,7 @@ function App() {
           onChange={(modo, meses, inicio, fim) => setFilters((f) => ({ ...f, periodoModo: modo, periodoMeses: meses, periodoInicio: inicio, periodoFim: fim }))}
           dataMin={derivado.dataMin}
           dataMax={derivado.dataMax}
+          rotulosMeses={payload.meses}
         />
         <MultiSelect label="Tipo de contrato" values={filters.contrato} options={[{ value: 'CLT', label: 'CLT' }, { value: 'PJ', label: 'PJ' }, { value: 'Estágio', label: 'Estágio' }, { value: 'Aprendiz', label: 'Aprendiz' }, { value: 'Diretor', label: 'Diretor' }, { value: 'Temporários', label: 'Temporários' }, { value: 'Outros', label: 'Outros' }]} onChange={(v) => setFilter('contrato', v)} width={170} placeholderTodos="Todos os contratos" />
         <button
@@ -645,6 +646,7 @@ function App() {
           onChange={(modo, meses, inicio, fim) => setFilters((f) => ({ ...f, periodoModo: modo, periodoMeses: meses, periodoInicio: inicio, periodoFim: fim }))}
           dataMin={derivado.dataMin}
           dataMax={derivado.dataMax}
+          rotulosMeses={payload.meses}
         />
         <MultiSelect label="Tipo de contrato" values={filters.contrato} options={[{ value: 'CLT', label: 'CLT' }, { value: 'PJ', label: 'PJ' }, { value: 'Estágio', label: 'Estágio' }, { value: 'Aprendiz', label: 'Aprendiz' }, { value: 'Diretor', label: 'Diretor' }, { value: 'Temporários', label: 'Temporários' }, { value: 'Outros', label: 'Outros' }]} onChange={(v) => setFilter('contrato', v)} width={170} placeholderTodos="Todos os contratos" />
         <MultiSelect label="Localização" values={filters.localizacao} options={derivado.localizacaoOptionsMulti} onChange={(v) => setFilter('localizacao', v)} width={220} placeholderTodos="Todas as localizações" />
