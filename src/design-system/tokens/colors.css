@@ -1,35 +1,55 @@
-/* Ali — Color tokens
+/* Unimed Uberlândia — Color tokens
    Base palettes (raw scales) + semantic aliases.
-   Brand: Azul Ali (corporate blue, from the ALI Tecnologia logo) = trust, tech, stability.
-   Accent: Azure (a brighter blue) = highlights, "new" pips, secondary emphasis.
-   Neutrals: slate grays — the same cool slate as the "ALI" wordmark.
+   Brand: Verde Unimed (Pantone 348c, #00995D — official corporate green).
+   Accent: Verde-limão (Pantone 381c, #B1D34B) = highlights, "new" pips, secondary emphasis.
+   Neutrals: slate grays — kept neutral/gray for text legibility (Unimed's own palette has
+   no gray scale; grays stay off-brand on purpose so body text/borders read cleanly).
+   Anchors below (--green-600, --azure-400/accent, --warning-500, --info-500's hue, --chart-5)
+   are exact hex matches to the official "Paleta de Cores.png" swatches provided by the client
+   (C:\Users\marce\OneDrive\Trabalho\Clientes\Unimed Uberlandia\KPI\Paleta de Cores.png).
+   Unused official swatches, kept here for future reuse: rosa claro #F1CDCD (691c),
+   bege #ECE3D9 (7527c).
    NOTE: the --teal-* and --amber-* tokens are kept as DEPRECATED ALIASES of the
    blue/azure scales so existing component code keeps working; new code should use
-   --blue-*, --accent, and the semantic aliases below. */
+   --green-*, --accent, and the semantic aliases below. (--blue-* is itself now a deprecated
+   alias of --green-* — components still reference --blue-600 etc. for "brand".) */
 
 :root {
-  /* ---- Brand: Azul Ali ---- */
-  --blue-50:  #EEF4FA;
-  --blue-100: #D6E5F2;
-  --blue-200: #AECCE6;
-  --blue-300: #7FAED6;
-  --blue-400: #5390C4;
-  --blue-500: #3B7CB4;
-  --blue-600: #3370A8;  /* brand — matches the logo "i" accent */
-  --blue-700: #2A5C8A;
-  --blue-800: #234A6E;
-  --blue-900: #1E3E5B;
-  --blue-950: #142838;
+  /* ---- Brand: Verde Unimed (Pantone 348c) ---- */
+  --green-50:  #E8F7F0;
+  --green-100: #C9EDDC;
+  --green-200: #9BDDBE;
+  --green-300: #64C89C;
+  --green-400: #35B27E;
+  --green-500: #0FA06A;
+  --green-600: #00995D;  /* brand — Pantone 348c, exact match */
+  --green-700: #00804C;
+  --green-800: #01673F;
+  --green-900: #054E32;
+  --green-950: #032E1E;
 
-  /* ---- Accent: Azure (brighter blue) ---- */
-  --azure-50:  #E9F3FC;
-  --azure-100: #CFE6FA;
-  --azure-200: #A6CFF3;
-  --azure-300: #6FB0EA;
-  --azure-400: #3D95E0;  /* accent */
-  --azure-500: #2E86D6;
-  --azure-600: #2473BE;
-  --azure-700: #1F619E;
+  /* ---- Deprecated alias (old blue brand → green) ---- */
+  --blue-50:  var(--green-50);
+  --blue-100: var(--green-100);
+  --blue-200: var(--green-200);
+  --blue-300: var(--green-300);
+  --blue-400: var(--green-400);
+  --blue-500: var(--green-500);
+  --blue-600: var(--green-600);
+  --blue-700: var(--green-700);
+  --blue-800: var(--green-800);
+  --blue-900: var(--green-900);
+  --blue-950: var(--green-950);
+
+  /* ---- Accent: Verde-limão (brighter, warmer green) ---- */
+  --azure-50:  #F6FAEC;
+  --azure-100: #E9F2CE;
+  --azure-200: #D5E9A3;
+  --azure-300: #C0DE79;
+  --azure-400: #B1D34B;  /* accent — Pantone 381c, exact match */
+  --azure-500: #9BBF3B;
+  --azure-600: #7FA02E;
+  --azure-700: #648025;
 
   /* ---- Deprecated aliases (old teal brand → blue) ---- */
   --teal-50:  var(--blue-50);
@@ -69,27 +89,34 @@
   --neutral-950: #0C1115;
 
   /* ---- Semantic palettes ---- */
-  --success-50:  #E7F6ED;
-  --success-100: #C6EAD3;
-  --success-500: #16A34A;
-  --success-600: #138A3F;
-  --success-700: #0F6E32;
+  /* Success: olive-green derived from "verde claro" (Pantone 7485c, #CDE3BB) hue,
+     darkened for legible text/icon use — kept visually distinct from brand green
+     and the lime accent so the three don't collapse into "everything is green". */
+  --success-50:  #F0F8ED;
+  --success-100: #DCEFD2;
+  --success-500: #4F962C;
+  --success-600: #3E7920;
+  --success-700: #316219;
 
+  /* Danger: no equivalent in the Unimed palette — kept a standard alarm red for
+     universal recognizability of errors/negative deltas. */
   --danger-50:  #FDECEC;
   --danger-100: #F9D2D2;
   --danger-500: #DC2626;
   --danger-600: #BE1D1D;
   --danger-700: #9B1717;
 
-  --warning-50:  #FEF4E6;
-  --warning-100: #FCE3BE;
-  --warning-500: #D97706;
-  --warning-600: #B86305;
+  --warning-50:  #FEF0E7;
+  --warning-100: #FCDCC5;
+  --warning-500: #F47920;  /* Pantone 1585c, exact match */
+  --warning-600: #DB5F06;
 
-  --info-50:  #EAF1FE;
-  --info-100: #CBDCFB;
-  --info-500: #2563EB;
-  --info-600: #1E4FC4;
+  /* Info: derived from "azul-claro/ciano" (Pantone 304c, #A4D8DE) hue,
+     darkened at -500/-600 for text/icon-strength contrast. */
+  --info-50:  #EDF7F8;
+  --info-100: #D2ECEF;
+  --info-500: #2E939E;
+  --info-600: #217983;
 
   /* ============================================================
      SEMANTIC ALIASES — use these in product code, not raw scales
@@ -148,7 +175,7 @@
   --chart-2: var(--warning-500);
   --chart-3: var(--info-500);
   --chart-4: var(--success-500);
-  --chart-5: #7C5CFC;
+  --chart-5: #D2A494;  /* terracota/rosé — Pantone 7521c, exact match */
   --chart-6: var(--neutral-400);
 
   /* Focus */
