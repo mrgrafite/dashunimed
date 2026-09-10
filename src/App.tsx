@@ -395,28 +395,27 @@ function App() {
       return { nome: e.nome, saldoPorTipo }
     })
 
-    // GPS por empresa (pedido 2026-09-10, fonte bronze_rhp_r054grp) - NAO reage a
-    // Periodo/Contrato (a fonte para em 2021-08, sem serie temporal dentro da janela do
-    // painel - ver item 12 do docstring do adapter) - so a Empresa, que ja filtra `emps`.
-    // Mostra sempre a ULTIMA competencia que a fonte tiver por empresa, com a competencia
-    // real exibida na tabela pra deixar claro que pode nao ser o periodo selecionado.
+    // GPS por empresa (pedido 2026-09-10, fonte bronze_rhp_r054grp) - virou serie mensal de
+    // verdade no mesmo dia (a fonte foi atualizada pelo time da Unimed, passou a ter dado
+    // ate 2026-08) - agora reage ao Periodo igual aos outros cards "por empresa", somando a
+    // janela selecionada. Cobertura ainda e parcial (so 1 empresa, dado real a partir de
+    // Dez/2025 - ver item 12 do docstring do adapter) - `semDadoNoPeriodo` sinaliza quando a
+    // janela escolhida cai inteira ANTES do primeiro mes com dado daquela empresa, pra nao
+    // mostrar "R$ 0,00" como se fosse GPS zero de verdade.
     // "Alíquota efetiva" (total/basemp) foi tentada e descartada (2026-09-10) - dava >100%
     // porque basemp (base da parte Empresa) e basou1 (base da parte Terceiros, com perou1%)
     // são bases DIFERENTES somadas na mesma linha - dividir o total combinado por só uma
     // delas mistura bases incompatíveis. Fica só valores absolutos até confirmar a fórmula
     // certa do índice com o Marcelo/time da Unimed.
     const empresaGpsRows = emps.map((e) => {
-      const g = e.gps
-      const totalGps = g ? g.valorEmpresa + g.valorTerceiros + g.valorSegurados - g.valorDeducao : 0
-      return {
-        nome: e.nome,
-        competencia: g?.competencia ?? null,
-        valorEmpresa: g?.valorEmpresa ?? 0,
-        valorTerceiros: g?.valorTerceiros ?? 0,
-        valorSegurados: g?.valorSegurados ?? 0,
-        valorDeducao: g?.valorDeducao ?? 0,
-        totalGps,
-      }
+      const valorEmpresa = e.historico.gpsValorEmpresa.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const valorTerceiros = e.historico.gpsValorTerceiros.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const valorSegurados = e.historico.gpsValorSegurados.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const valorDeducao = e.historico.gpsValorDeducao.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const totalGps = valorEmpresa + valorTerceiros + valorSegurados - valorDeducao
+      const semDadoNoPeriodo = e.gpsPrimeiroMesComDado > janela.fim
+      const primeiroMesLabel = e.gpsPrimeiroMesComDado < 12 ? payload.meses[e.gpsPrimeiroMesComDado] : null
+      return { nome: e.nome, valorEmpresa, valorTerceiros, valorSegurados, valorDeducao, totalGps, semDadoNoPeriodo, primeiroMesLabel }
     })
 
     const empresaOptionsMulti = empresas.map((e) => ({ value: e.id, label: e.nome }))
@@ -606,21 +605,27 @@ function App() {
 
       <Card
         title="GPS por empresa"
-        subtitle="Guia da Previdência Social · fonte: bronze_rhp_r054grp · não reage ao filtro de Período/Contrato (dado não tem série temporal na janela atual)"
+        subtitle={`Guia da Previdência Social · ${derivado.nMesesLabel} · fonte: bronze_rhp_r054grp · cobertura ainda parcial na fonte (por ora só 1 empresa) — ver nota por linha`}
         bodyPadding="0"
       >
-        <div style={{ padding: '10px 20px 0', font: 'var(--fw-medium) var(--text-body-sm)/1.4 var(--font-sans)', color: 'var(--warning-600)', background: 'var(--warning-50)', margin: '0 0 4px' }}>
-          ⚠ Dado desatualizado na fonte — competência mais recente disponível por empresa mostrada na coluna "Competência" (não é o período selecionado no filtro). Empresas sem linha na fonte aparecem zeradas.
-        </div>
         <EmpresaGenericTable
           rows={derivado.empresaGpsRows}
           colunas={[
-            { header: 'Competência', render: (r) => r.competencia ?? 'sem dado' },
             { header: 'Valor Empresa', render: (r) => brl(r.valorEmpresa) },
             { header: 'Valor Terceiros', render: (r) => brl(r.valorTerceiros) },
             { header: 'Valor Segurados', render: (r) => brl(r.valorSegurados) },
             { header: 'Dedução', render: (r) => brl(r.valorDeducao) },
-            { header: 'Total GPS', render: (r) => <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{brl(r.totalGps)}</span> },
+            {
+              header: 'Total GPS',
+              render: (r) =>
+                r.semDadoNoPeriodo ? (
+                  <span style={{ color: 'var(--text-faint)' }}>
+                    sem dado {r.primeiroMesLabel ? `(fonte começa em ${r.primeiroMesLabel})` : 'na fonte'}
+                  </span>
+                ) : (
+                  <span style={{ fontWeight: 600, color: 'var(--text-strong)' }}>{brl(r.totalGps)}</span>
+                ),
+            },
           ]}
         />
       </Card>

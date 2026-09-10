@@ -47,6 +47,13 @@ export interface Historico {
   /** Contagem de pessoas DISTINTAS com algum afastamento (qualquer tipo, inclusive ferias/licencas)
    * sobrepondo o mes - KPI "Afastamentos" do dicionario oficial (taxa = isso / HC medio). */
   afastadosDistintos: number[]
+  /** GPS (Guia da Previdencia Social) por mes - fonte bronze_rhp_r054grp. Ver
+   * `gpsPrimeiroMesComDado` em Empresa - meses antes disso ficam zerados (nao e GPS zero de
+   * verdade, e ausencia de dado na fonte, mesmo padrao de CustoFolhaPayload.primeiroMesComDado). */
+  gpsValorEmpresa: number[]
+  gpsValorTerceiros: number[]
+  gpsValorSegurados: number[]
+  gpsValorDeducao: number[]
 }
 
 /** Composicao de dias de afastamento por motivo (TODOS os tipos - ferias, licencas, atestado,
@@ -54,18 +61,6 @@ export interface Historico {
 export interface AfastamentoMotivo {
   motivo: string
   valores: number[]
-}
-
-/** Guia da Previdencia Social (R054GRP) - ULTIMA competencia com dado disponivel pra essa
- * empresa, nao necessariamente dentro do periodo selecionado no filtro (a fonte para em
- * 2021-08 - ver docstring do adapter, item 12). `null` = empresa sem nenhuma linha na fonte. */
-export interface Gps {
-  competencia: string
-  valorEmpresa: number
-  valorTerceiros: number
-  valorSegurados: number
-  valorDeducao: number
-  baseCalculo: number
 }
 
 export interface Empresa {
@@ -78,7 +73,10 @@ export interface Empresa {
   admissoesEventos: EventoContrato[]
   desligamentosEventos: EventoContrato[]
   afastamentosPorMotivo: AfastamentoMotivo[]
-  gps: Gps | null
+  /** Indice (0-based, 12 = nenhum) do primeiro mes da janela de 12 meses do payload com dado
+   * real de GPS (bronze_rhp_r054grp) - a fonte so cobre 1 empresa a partir de Dez/2025 por
+   * ora, ver docstring do adapter item 12. */
+  gpsPrimeiroMesComDado: number
 }
 
 export interface Payload {
