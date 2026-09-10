@@ -69,14 +69,14 @@
           "custo": 104512.93
         },
         {
-          "nome": "FINANCEIRO E CADASTRO",
-          "atual": 16,
-          "custo": 54220.03
-        },
-        {
           "nome": "CONTABILIDADE",
           "atual": 16,
           "custo": 94117.5
+        },
+        {
+          "nome": "FINANCEIRO E CADASTRO",
+          "atual": 16,
+          "custo": 54220.03
         },
         {
           "nome": "COORDENACAO DE REDE ASSISTENCIAL",
@@ -89,6 +89,11 @@
           "custo": 91317.46
         },
         {
+          "nome": "E+U MARILEUSA ATENCAO PRIMARIA A SAUDE",
+          "atual": 12,
+          "custo": 48644.8
+        },
+        {
           "nome": "GERENCIA DE VENDAS SERVI",
           "atual": 12,
           "custo": 60356.08
@@ -97,11 +102,6 @@
           "nome": "SUPRIMENTOS",
           "atual": 12,
           "custo": 45068.72
-        },
-        {
-          "nome": "E+U MARILEUSA ATENCAO PRIMARIA A SAUDE",
-          "atual": 12,
-          "custo": 48644.8
         },
         {
           "nome": "GERENCIA DE MERCADO E VENDAS",
@@ -119,9 +119,9 @@
           "custo": 44034.23
         },
         {
-          "nome": "FISIOTERAPIA",
+          "nome": "GERENCIA JURIDICO",
           "atual": 10,
-          "custo": 40959.7
+          "custo": 74606.99
         },
         {
           "nome": "AREA DE GOVERNANCA",
@@ -129,24 +129,14 @@
           "custo": 87665.03
         },
         {
-          "nome": "E+U SHOPPING ATENCAO PRIMARIA A SAUDE",
-          "atual": 10,
-          "custo": 44921.97
-        },
-        {
-          "nome": "GERENCIA JURIDICO",
-          "atual": 10,
-          "custo": 74606.99
-        },
-        {
-          "nome": "ADMINISTRATIVO SOU",
-          "atual": 10,
-          "custo": 31319.91
-        },
-        {
           "nome": "ENFERMAGEM (ONCOLOGIA)",
           "atual": 10,
           "custo": 59573.8
+        },
+        {
+          "nome": "E+U SHOPPING ATENCAO PRIMARIA A SAUDE",
+          "atual": 10,
+          "custo": 44921.97
         },
         {
           "nome": "RECEPCAO",
@@ -154,14 +144,24 @@
           "custo": 19866.8
         },
         {
-          "nome": "COORDENACAO DE SERVICOS DIGITAIS",
-          "atual": 9,
-          "custo": 64934.81
+          "nome": "FISIOTERAPIA",
+          "atual": 10,
+          "custo": 40959.7
+        },
+        {
+          "nome": "ADMINISTRATIVO SOU",
+          "atual": 10,
+          "custo": 31319.91
         },
         {
           "nome": "PSICOLOGIA",
           "atual": 9,
           "custo": 31694.67
+        },
+        {
+          "nome": "COORDENACAO DE SERVICOS DIGITAIS",
+          "atual": 9,
+          "custo": 64934.81
         },
         {
           "nome": "MASSOTERAPEUTAS",
@@ -189,14 +189,9 @@
           "custo": 22020.6
         },
         {
-          "nome": "PATRIMONIO E INSTALACOES",
+          "nome": "DEPARTAMENTO PESSOAL",
           "atual": 7,
-          "custo": 34281.1
-        },
-        {
-          "nome": "CONTROLADORIA",
-          "atual": 7,
-          "custo": 45782.18
+          "custo": 35325.51
         },
         {
           "nome": "ADMINISTRATIVO (ONCOLOGIA)",
@@ -204,44 +199,19 @@
           "custo": 32903.2
         },
         {
+          "nome": "PATRIMONIO E INSTALACOES",
+          "atual": 7,
+          "custo": 34281.1
+        },
+        {
           "nome": "E+U MARILEUSA RECEPCAO",
           "atual": 7,
           "custo": 13733.87
         },
         {
-          "nome": "DEPARTAMENTO PESSOAL",
+          "nome": "CONTROLADORIA",
           "atual": 7,
-          "custo": 35325.51
-        },
-        {
-          "nome": "OUVIDORIA",
-          "atual": 6,
-          "custo": 31459.86
-        },
-        {
-          "nome": "INTELIGENCIA DE DADOS E PARAMENTROS",
-          "atual": 6,
-          "custo": 44079.8
-        },
-        {
-          "nome": "COORDENACAO ATUARIAL E SINISTRALIDADE",
-          "atual": 6,
-          "custo": 63689.11
-        },
-        {
-          "nome": "MATERNO INFANTIL (184872)",
-          "atual": 6,
-          "custo": 22926.43
-        },
-        {
-          "nome": "RECEPCAO ATENDIMENTO (ONCOLOGIA)",
-          "atual": 6,
-          "custo": 13689.93
-        },
-        {
-          "nome": "IDOSO BEM CUIDADO(183072)",
-          "atual": 6,
-          "custo": 24324.34
+          "custo": 45782.18
         },
         {
           "nome": "GERENCIA DE RELACIONAMENTO COM O COOPERADO",
@@ -249,14 +219,34 @@
           "custo": 36361.64
         },
         {
-          "nome": "E+U VASCONCELOS ATENCAO PRIMARIA A SAUDE",
-          "atual": 5,
-          "custo": 22597.49
+          "nome": "COORDENACAO ATUARIAL E SINISTRALIDADE",
+          "atual": 6,
+          "custo": 63689.11
         },
         {
-          "nome": "COORDENACAO INFRAESTRUTURA",
-          "atual": 5,
-          "custo": 45750.48
+          "nome": "OUVIDORIA",
+          "atual": 6,
+          "custo": 31459.86
+        },
+        {
+          "nome": "RECEPCAO ATENDIMENTO (ONCOLOGIA)",
+          "atual": 6,
+          "custo": 13689.93
+        },
+        {
+          "nome": "INTELIGENCIA DE DADOS E PARAMENTROS",
+          "atual": 6,
+          "custo": 44079.8
+        },
+        {
+          "nome": "MATERNO INFANTIL (184872)",
+          "atual": 6,
+          "custo": 22926.43
+        },
+        {
+          "nome": "IDOSO BEM CUIDADO(183072)",
+          "atual": 6,
+          "custo": 24324.34
         },
         {
           "nome": "FARMACIA ONCOLOGIA",
@@ -274,14 +264,19 @@
           "custo": 28203.92
         },
         {
+          "nome": "SERVICO DE ATENCAO DOMICILIAR SAD",
+          "atual": 5,
+          "custo": 25780.63
+        },
+        {
           "nome": "EQUIPE MULTIDISCIPLINAR",
           "atual": 5,
           "custo": 16429.28
         },
         {
-          "nome": "SERVICO DE ATENCAO DOMICILIAR SAD",
+          "nome": "E+U VASCONCELOS ATENCAO PRIMARIA A SAUDE",
           "atual": 5,
-          "custo": 25780.63
+          "custo": 22597.49
         },
         {
           "nome": "GERENCIA DE TI",
@@ -289,19 +284,9 @@
           "custo": 47501.74
         },
         {
-          "nome": "E + U VASCONCELOS PROCEDIMENTOS",
-          "atual": 4,
-          "custo": 17124.95
-        },
-        {
-          "nome": "E+U VASCONCELOS RECEPCAO",
-          "atual": 4,
-          "custo": 6934.56
-        },
-        {
-          "nome": "CONSULTA MEDICA TECNICO OCUPACIONAL",
-          "atual": 4,
-          "custo": 11470.35
+          "nome": "COORDENACAO INFRAESTRUTURA",
+          "atual": 5,
+          "custo": 45750.48
         },
         {
           "nome": "E+U MARILEUSA ATENCAO MULTIPROFISSIONAL",
@@ -319,6 +304,26 @@
           "custo": 55874.18
         },
         {
+          "nome": "E + U VASCONCELOS PROCEDIMENTOS",
+          "atual": 4,
+          "custo": 17124.95
+        },
+        {
+          "nome": "CONSULTA MEDICA TECNICO OCUPACIONAL",
+          "atual": 4,
+          "custo": 11470.35
+        },
+        {
+          "nome": "E+U VASCONCELOS RECEPCAO",
+          "atual": 4,
+          "custo": 6934.56
+        },
+        {
+          "nome": "COORDENACAO DE OPERACOES",
+          "atual": 3,
+          "custo": 34625.07
+        },
+        {
           "nome": "E+U SHOPPING ATENCAO MULTIPROFISSIONAL",
           "atual": 3,
           "custo": 10781.97
@@ -334,11 +339,6 @@
           "custo": 12161.2
         },
         {
-          "nome": "E+U VASCONCELOS ATENCAO MULTIPROFISSIONAL",
-          "atual": 3,
-          "custo": 9099.77
-        },
-        {
           "nome": "NAVEGACAO DO CUIDADO MEDICINA PREVENTIVA",
           "atual": 3,
           "custo": 12161.2
@@ -349,24 +349,9 @@
           "custo": 15852.58
         },
         {
-          "nome": "COORDENACAO DE OPERACOES",
+          "nome": "E+U VASCONCELOS ATENCAO MULTIPROFISSIONAL",
           "atual": 3,
-          "custo": 34625.07
-        },
-        {
-          "nome": "TERAPIA OCUPACIONAL",
-          "atual": 2,
-          "custo": 13207.43
-        },
-        {
-          "nome": "LINHAS DE CUIDADO MENTE SAUDAVEL",
-          "atual": 2,
-          "custo": 7892.59
-        },
-        {
-          "nome": "DIU OPERADORA",
-          "atual": 2,
-          "custo": 3745.46
+          "custo": 9099.77
         },
         {
           "nome": "FARMACIA SAD",
@@ -374,9 +359,24 @@
           "custo": 6452.72
         },
         {
-          "nome": "SERVICO SOCIAL",
+          "nome": "E+U SHOPPING FARMACIA",
           "atual": 2,
-          "custo": 5884.68
+          "custo": 10092.78
+        },
+        {
+          "nome": "DIU OPERADORA",
+          "atual": 2,
+          "custo": 3745.46
+        },
+        {
+          "nome": "LINHAS DE CUIDADO MENTE SAUDAVEL",
+          "atual": 2,
+          "custo": 7892.59
+        },
+        {
+          "nome": "E+U MARILEUSA FARMACIA",
+          "atual": 2,
+          "custo": 9301.03
         },
         {
           "nome": "EQUIPE MEDICA",
@@ -384,14 +384,14 @@
           "custo": 14588.7
         },
         {
+          "nome": "SERVICO SOCIAL",
+          "atual": 2,
+          "custo": 5884.68
+        },
+        {
           "nome": "SECRETARIA EXECUTIVA UNIMED",
           "atual": 2,
           "custo": 8973.9
-        },
-        {
-          "nome": "E+U MARILEUSA FARMACIA",
-          "atual": 2,
-          "custo": 9301.03
         },
         {
           "nome": "CONSULTAS MULTI SEMPRE",
@@ -404,9 +404,9 @@
           "custo": 5071.14
         },
         {
-          "nome": "E+U SHOPPING FARMACIA",
+          "nome": "TERAPIA OCUPACIONAL",
           "atual": 2,
-          "custo": 10092.78
+          "custo": 13207.43
         },
         {
           "nome": "ESPACO DO IDOSO VASCONCELOS",
@@ -414,14 +414,44 @@
           "custo": 4817.48
         },
         {
-          "nome": "ADMINISTRATIVO SERVICOS PROPRIOS",
+          "nome": "E+U VASCONCELOS ADMINISTRATIVO",
           "atual": 1,
-          "custo": 4673.83
+          "custo": 4076.63
         },
         {
-          "nome": "COPA (ONCOLOGIA)",
+          "nome": "PSICOPEDAGOGIA",
           "atual": 1,
-          "custo": 1621.0
+          "custo": 3636.6
+        },
+        {
+          "nome": "LINHAS DE CUIDADO DO IDOSO",
+          "atual": 1,
+          "custo": 3946.3
+        },
+        {
+          "nome": "PROCEDIMENTOS SEMPRE",
+          "atual": 1,
+          "custo": 4963.75
+        },
+        {
+          "nome": "E+U MARILEUSA ADMINISTRATIVO",
+          "atual": 1,
+          "custo": 2437.85
+        },
+        {
+          "nome": "FONOAUDIOLOGIA",
+          "atual": 1,
+          "custo": 4417.91
+        },
+        {
+          "nome": "DIRETORIA DE SERVICOS PROPRIOS",
+          "atual": 1,
+          "custo": 8000.0
+        },
+        {
+          "nome": "TI OPERADORA",
+          "atual": 1,
+          "custo": 6498.65
         },
         {
           "nome": "ADMINISTRATIVO SAD",
@@ -434,34 +464,19 @@
           "custo": 22000.0
         },
         {
-          "nome": "LINHAS DE CUIDADO DO IDOSO",
-          "atual": 1,
-          "custo": 3946.3
-        },
-        {
-          "nome": "COMPLIANCE",
-          "atual": 1,
-          "custo": 6938.66
-        },
-        {
-          "nome": "E+U VASCONCELOS ADMINISTRATIVO",
-          "atual": 1,
-          "custo": 4076.63
-        },
-        {
           "nome": "MEDICAMENTOS ORAIS (ONCOLOGIA)",
           "atual": 1,
           "custo": 5834.34
         },
         {
-          "nome": "E+U MARILEUSA ADMINISTRATIVO",
+          "nome": "FARMACIA SEMPRE",
           "atual": 1,
-          "custo": 2437.85
+          "custo": 5042.59
         },
         {
-          "nome": "DIRETORIA ADMINISTRATIVA FINANCEIRA",
+          "nome": "COMPLIANCE",
           "atual": 1,
-          "custo": 4732.22
+          "custo": 6938.66
         },
         {
           "nome": "ADMINISTRATIVO ADM (EVB)",
@@ -474,29 +489,19 @@
           "custo": 22000.0
         },
         {
+          "nome": "DIRETORIA ADMINISTRATIVA FINANCEIRA",
+          "atual": 1,
+          "custo": 4732.22
+        },
+        {
           "nome": "E+U VASCONCELOS FARMACIA",
           "atual": 1,
           "custo": 4258.44
         },
         {
-          "nome": "PSICOPEDAGOGIA",
+          "nome": "COPA (ONCOLOGIA)",
           "atual": 1,
-          "custo": 3636.6
-        },
-        {
-          "nome": "FARMACIA SEMPRE",
-          "atual": 1,
-          "custo": 5042.59
-        },
-        {
-          "nome": "FONOAUDIOLOGIA",
-          "atual": 1,
-          "custo": 4417.91
-        },
-        {
-          "nome": "ASSESSORIA DE NEGOCIOS",
-          "atual": 1,
-          "custo": 24674.36
+          "custo": 1621.0
         },
         {
           "nome": "CUIDADOS PALIATIVOS",
@@ -504,24 +509,19 @@
           "custo": 6335.15
         },
         {
+          "nome": "ADMINISTRATIVO SERVICOS PROPRIOS",
+          "atual": 1,
+          "custo": 4673.83
+        },
+        {
+          "nome": "ASSESSORIA DE NEGOCIOS",
+          "atual": 1,
+          "custo": 24674.36
+        },
+        {
           "nome": "EXAMES SEMPRE",
           "atual": 1,
           "custo": 3474.63
-        },
-        {
-          "nome": "PROCEDIMENTOS SEMPRE",
-          "atual": 1,
-          "custo": 4963.75
-        },
-        {
-          "nome": "TI OPERADORA",
-          "atual": 1,
-          "custo": 6498.65
-        },
-        {
-          "nome": "DIRETORIA DE SERVICOS PROPRIOS",
-          "atual": 1,
-          "custo": 8000.0
         }
       ],
       "colaboradores": [
@@ -677,15 +677,6 @@
           "salario": 31350.0,
           "idade": 54,
           "tempoCasaMeses": 192
-        },
-        {
-          "centroCusto": "COORDENACAO DE REDE ASSISTENCIAL",
-          "cargo": "ESPECIALISTA DE REDE ASSIST.",
-          "contrato": "CLT",
-          "filial": "Unimed Uberlandia",
-          "salario": 7645.03,
-          "idade": 52,
-          "tempoCasaMeses": 386
         },
         {
           "centroCusto": "COORDENACAO AUTORIZACAO",
@@ -1246,15 +1237,6 @@
           "tempoCasaMeses": 39
         },
         {
-          "centroCusto": "MATERNO INFANTIL (184872)",
-          "cargo": "NUTRICIONISTA ",
-          "contrato": "CLT",
-          "filial": "Espaco Viver Bem",
-          "salario": 3059.82,
-          "idade": 37,
-          "tempoCasaMeses": 69
-        },
-        {
           "centroCusto": "RECEPCAO",
           "cargo": "ATENDENTE",
           "contrato": "CLT",
@@ -1759,15 +1741,6 @@
           "tempoCasaMeses": 26
         },
         {
-          "centroCusto": "FINANCEIRO E CADASTRO",
-          "cargo": "ANALISTA DE CADASTRO JR",
-          "contrato": "CLT",
-          "filial": "Unimed Uberlandia",
-          "salario": 3803.8,
-          "idade": 37,
-          "tempoCasaMeses": 47
-        },
-        {
           "centroCusto": "ADMINISTRATIVO (ONCOLOGIA)",
           "cargo": "COORDENADOR ADMINISTRATIVO",
           "contrato": "CLT",
@@ -2162,15 +2135,6 @@
           "salario": 2270.31,
           "idade": 44,
           "tempoCasaMeses": 31
-        },
-        {
-          "centroCusto": "IDOSO BEM CUIDADO(183072)",
-          "cargo": "FISIOTERAPEUTA",
-          "contrato": "CLT",
-          "filial": "Espaco Viver Bem",
-          "salario": 2690.66,
-          "idade": 28,
-          "tempoCasaMeses": 29
         },
         {
           "centroCusto": "COORDENAÇÃO DE AUDITORIA CONCORRENTE",
@@ -2692,15 +2656,6 @@
           "filial": "AMAR - Amparo Acolhim. e Reab. In",
           "salario": 3332.02,
           "idade": 40,
-          "tempoCasaMeses": 23
-        },
-        {
-          "centroCusto": "COORDENACAO DE VENDAS",
-          "cargo": "JOVEM APRENDIZ",
-          "contrato": "Aprendiz",
-          "filial": "Central de Vendas Unimed Uberlândia",
-          "salario": 761.55,
-          "idade": 19,
           "tempoCasaMeses": 23
         },
         {
@@ -5035,6 +4990,15 @@
           "tempoCasaMeses": 0
         },
         {
+          "centroCusto": "GERENCIA JURIDICO",
+          "cargo": "ADVOGADO(A) JR",
+          "contrato": "CLT",
+          "filial": "Unimed Uberlandia",
+          "salario": 4674.61,
+          "idade": 36,
+          "tempoCasaMeses": 0
+        },
+        {
           "centroCusto": "DESENVOLVIMENTO PESSOAL",
           "cargo": "BUSINESS PARTNER RH",
           "contrato": "CLT",
@@ -5312,6 +5276,24 @@
           "salario": 3474.63,
           "idade": 37,
           "tempoCasaMeses": 0
+        },
+        {
+          "centroCusto": "ADMINISTRATIVO (ONCOLOGIA)",
+          "cargo": "ESPECIALISTA SERVIÇOS E PROCES",
+          "contrato": "CLT",
+          "filial": "Espaço de Saúde Oncologia Unimed UDIA",
+          "salario": 7645.03,
+          "idade": 52,
+          "tempoCasaMeses": 386
+        },
+        {
+          "centroCusto": "E+U MARILEUSA ATENCAO MULTIPROFISSIONAL",
+          "cargo": "FISIOTERAPEUTA",
+          "contrato": "CLT",
+          "filial": "Granja Marileusa",
+          "salario": 2690.66,
+          "idade": 28,
+          "tempoCasaMeses": 29
         },
         {
           "centroCusto": "E+U SHOPPING ATENCAO PRIMARIA A SAUDE",
@@ -5647,6 +5629,15 @@
           "tempoCasaMeses": 0
         },
         {
+          "centroCusto": "GERENCIA JURIDICO",
+          "cargo": "ADVOGADO(A) PL",
+          "contrato": "CLT",
+          "filial": "Unimed Uberlandia",
+          "salario": 7965.0,
+          "idade": 36,
+          "tempoCasaMeses": 0
+        },
+        {
           "centroCusto": "COORDENACAO TECNOLOGIA DA INFORMACAO",
           "cargo": "ANALISTA DE SERVICE DESK JR",
           "contrato": "CLT",
@@ -5735,6 +5726,33 @@
           "salario": 6033.47,
           "idade": 45,
           "tempoCasaMeses": 7
+        },
+        {
+          "centroCusto": "DESENVOLVIMENTO PESSOAL",
+          "cargo": "MASSOTERAPEUTA",
+          "contrato": "CLT",
+          "filial": "Unimed Uberlandia",
+          "salario": 1621.0,
+          "idade": 47,
+          "tempoCasaMeses": 0
+        },
+        {
+          "centroCusto": "E+U MARILEUSA ATENCAO MULTIPROFISSIONAL",
+          "cargo": "NUTRICIONISTA ",
+          "contrato": "CLT",
+          "filial": "Granja Marileusa",
+          "salario": 3059.82,
+          "idade": 37,
+          "tempoCasaMeses": 69
+        },
+        {
+          "centroCusto": "CLINICA DE ESPECIALIDADES - SEMPRE",
+          "cargo": "ATENDENTE",
+          "contrato": "CLT",
+          "filial": "Sempre Unimed Uberlândia",
+          "salario": 1733.64,
+          "idade": 27,
+          "tempoCasaMeses": 0
         },
         {
           "centroCusto": "AREA DE GOVERNANCA",
@@ -6635,16 +6653,16 @@
         "horasAbsenteismoCurto": [
           2964.7833333333333,
           2848.4,
-          3140.6833333333334,
+          3140.683333333333,
           3641.333333333334,
           11671.466666666665,
           3284.0666666666666,
           2496.5333333333333,
           2963.4166666666665,
           2970.3,
-          2498.583333333334,
-          3310.45,
-          2710.65
+          2498.5833333333335,
+          3310.4500000000003,
+          2710.6499999999996
         ],
         "horasAbsenteismoLongo": [
           734.9499999999999,
@@ -6675,18 +6693,18 @@
           361.2
         ],
         "afastadosDistintos": [
-          315,
+          316,
           300,
-          292,
-          289,
-          334,
-          274,
-          285,
-          249,
-          255,
-          232,
-          304,
-          263
+          293,
+          291,
+          337,
+          275,
+          287,
+          252,
+          257,
+          233,
+          307,
+          270
         ]
       },
       "admissoesContrato": [
@@ -7691,10 +7709,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-08-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-04-02",
           "contrato": "CLT"
         },
@@ -7708,10 +7722,6 @@
         },
         {
           "data": "2025-12-12",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
           "contrato": "CLT"
         },
         {
@@ -7751,10 +7761,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-01-14",
           "contrato": "CLT"
         },
@@ -7764,14 +7770,6 @@
         },
         {
           "data": "2026-06-11",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
           "contrato": "CLT"
         },
         {
@@ -7795,10 +7793,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-04-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-09-12",
           "contrato": "CLT"
         },
@@ -7808,10 +7802,6 @@
         },
         {
           "data": "2026-02-12",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -7827,23 +7817,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-02-02",
           "contrato": "CLT"
         },
         {
           "data": "2026-01-15",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -7887,10 +7865,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-11-13",
           "contrato": "CLT"
         },
@@ -7919,14 +7893,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-04-09",
           "contrato": "CLT"
         },
@@ -7943,19 +7909,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-08-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-12-11",
           "contrato": "CLT"
         },
         {
           "data": "2026-02-09",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-05",
           "contrato": "CLT"
         },
         {
@@ -7988,10 +7946,6 @@
         },
         {
           "data": "2026-03-18",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
           "contrato": "CLT"
         },
         {
@@ -8031,10 +7985,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-12-12",
           "contrato": "CLT"
         },
@@ -8063,15 +8013,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-06-10",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
           "contrato": "CLT"
         },
         {
@@ -8123,24 +8065,12 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-03-21",
-          "contrato": "Estágio"
-        },
-        {
-          "data": "2026-04-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-08-01",
           "contrato": "CLT"
         },
         {
           "data": "2025-12-12",
           "contrato": "CLT"
-        },
-        {
-          "data": "2025-09-30",
-          "contrato": "Estágio"
         },
         {
           "data": "2026-03-09",
@@ -8171,10 +8101,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-01-26",
           "contrato": "CLT"
         },
@@ -8185,10 +8111,6 @@
         {
           "data": "2025-11-14",
           "contrato": "CLT"
-        },
-        {
-          "data": "2025-09-15",
-          "contrato": "Estágio"
         },
         {
           "data": "2026-04-06",
@@ -8231,10 +8153,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-02-10",
           "contrato": "PJ"
         },
@@ -8264,10 +8182,6 @@
         },
         {
           "data": "2026-03-02",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -8303,27 +8217,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-05-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-08-14",
           "contrato": "CLT"
         },
         {
           "data": "2025-11-10",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-02-01",
           "contrato": "CLT"
         },
         {
@@ -8340,18 +8238,6 @@
         },
         {
           "data": "2026-02-06",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-02-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
           "contrato": "CLT"
         },
         {
@@ -8379,23 +8265,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-03",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-04-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-01-05",
           "contrato": "CLT"
         },
         {
           "data": "2026-03-16",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-09-01",
           "contrato": "CLT"
         },
         {
@@ -8408,10 +8282,6 @@
         },
         {
           "data": "2026-03-10",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
           "contrato": "CLT"
         },
         {
@@ -8435,10 +8305,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-05-15",
-          "contrato": "Estágio"
-        },
-        {
           "data": "2026-06-05",
           "contrato": "Aprendiz"
         },
@@ -8459,23 +8325,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-13",
-          "contrato": "Estágio"
-        },
-        {
           "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
           "data": "2025-12-12",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
           "contrato": "CLT"
         },
         {
@@ -8507,24 +8361,12 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-09-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-05-07",
           "contrato": "CLT"
         },
         {
-          "data": "2025-11-07",
-          "contrato": "PJ"
-        },
-        {
           "data": "2026-06-02",
           "contrato": "Aprendiz"
-        },
-        {
-          "data": "2025-09-01",
-          "contrato": "CLT"
         },
         {
           "data": "2026-06-12",
@@ -8536,14 +8378,6 @@
         },
         {
           "data": "2026-06-12",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-05-19",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-08-01",
           "contrato": "CLT"
         },
         {
@@ -8571,19 +8405,11 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-04-01",
           "contrato": "CLT"
         },
         {
           "data": "2025-09-18",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -8627,16 +8453,8 @@
           "contrato": "CLT"
         },
         {
-          "data": "2026-08-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-04-01",
           "contrato": "PJ"
-        },
-        {
-          "data": "2026-04-01",
-          "contrato": "CLT"
         },
         {
           "data": "2026-02-11",
@@ -8667,19 +8485,11 @@
           "contrato": "PJ"
         },
         {
-          "data": "2026-02-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2026-02-02",
           "contrato": "CLT"
         },
         {
           "data": "2025-12-12",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-07-04",
           "contrato": "CLT"
         },
         {
@@ -8711,35 +8521,35 @@
         {
           "motivo": "Férias",
           "valores": [
-            992,
+            1006,
             1545,
             1114,
-            1255,
-            2128,
+            1279,
+            2145,
             1040,
-            1152,
-            895,
+            1157,
+            915,
             1025,
             781,
-            1544,
+            1559,
             1155
           ]
         },
         {
           "motivo": "Atestado",
           "valores": [
-            555,
+            556,
             459,
-            517,
-            408,
-            415,
-            394,
-            468,
-            409,
-            379,
-            379,
-            400,
-            384
+            518,
+            410,
+            418,
+            395,
+            469,
+            410,
+            380,
+            380,
+            403,
+            402
           ]
         },
         {
@@ -8802,9 +8612,9 @@
             21,
             4,
             8,
-            29,
+            30,
             2,
-            17,
+            18,
             15,
             7,
             19
@@ -8847,7 +8657,7 @@
         {
           "motivo": "Licenca Casamento",
           "valores": [
-            4,
+            8,
             0,
             8,
             0,
@@ -9143,7 +8953,7 @@
         "horasAbsenteismoCurto": [
           603.5333333333333,
           527.6833333333334,
-          305.06666666666666,
+          305.0666666666667,
           0.0,
           0.0,
           0.0,
@@ -9655,63 +9465,7 @@
       ],
       "desligamentosEventos": [
         {
-          "data": "2025-12-01",
-          "contrato": "Aprendiz"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "PJ"
-        },
-        {
           "data": "2025-09-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -9719,51 +9473,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-09-10",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -9771,107 +9481,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-11-07",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -9879,55 +9489,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-11-14",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -9935,95 +9497,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -10035,26 +9509,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-19",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-11-19",
           "contrato": "CLT"
         },
@@ -10063,35 +9517,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
+          "data": "2025-11-19",
           "contrato": "CLT"
         },
         {
@@ -10103,18 +9529,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-10-10",
           "contrato": "CLT"
         },
@@ -10123,111 +9537,7 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-11-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-10-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-09-19",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
@@ -10239,108 +9549,12 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
           "data": "2025-09-19",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
           "contrato": "CLT"
         },
         {
           "data": "2025-11-19",
           "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-01-06",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-06-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-06-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-06-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-06-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2025-10-02",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-06-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2026-01-01",
-          "contrato": "PJ"
-        },
-        {
-          "data": "2025-12-01",
-          "contrato": "Estágio"
         }
       ],
       "afastamentosPorMotivo": [
@@ -11270,10 +10484,6 @@
           "contrato": "CLT"
         },
         {
-          "data": "2025-09-01",
-          "contrato": "PJ"
-        },
-        {
           "data": "2026-06-18",
           "contrato": "PJ"
         }
@@ -12055,10 +11265,6 @@
         },
         {
           "data": "2026-01-23",
-          "contrato": "CLT"
-        },
-        {
-          "data": "2026-06-01",
           "contrato": "CLT"
         },
         {
