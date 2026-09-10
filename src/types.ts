@@ -56,6 +56,18 @@ export interface AfastamentoMotivo {
   valores: number[]
 }
 
+/** Guia da Previdencia Social (R054GRP) - ULTIMA competencia com dado disponivel pra essa
+ * empresa, nao necessariamente dentro do periodo selecionado no filtro (a fonte para em
+ * 2021-08 - ver docstring do adapter, item 12). `null` = empresa sem nenhuma linha na fonte. */
+export interface Gps {
+  competencia: string
+  valorEmpresa: number
+  valorTerceiros: number
+  valorSegurados: number
+  valorDeducao: number
+  baseCalculo: number
+}
+
 export interface Empresa {
   id: string
   nome: string
@@ -66,6 +78,7 @@ export interface Empresa {
   admissoesEventos: EventoContrato[]
   desligamentosEventos: EventoContrato[]
   afastamentosPorMotivo: AfastamentoMotivo[]
+  gps: Gps | null
 }
 
 export interface Payload {
