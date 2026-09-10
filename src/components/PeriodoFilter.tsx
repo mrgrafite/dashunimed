@@ -8,6 +8,9 @@ interface PeriodoFilterProps {
   fim: string | null
   onChange: (modo: PeriodoModo, meses: number, inicio: string | null, fim: string | null) => void
   width?: number
+  /** Limites da janela de 12 meses que o payload cobre - fora disso nao ha dado pra responder. */
+  dataMin: string
+  dataMax: string
 }
 
 const fmtBr = (iso: string) => {
@@ -17,7 +20,7 @@ const fmtBr = (iso: string) => {
 
 const OPCOES_MESES = [3, 6, 12]
 
-export function PeriodoFilter({ modo, meses, inicio, fim, onChange, width = 190 }: PeriodoFilterProps) {
+export function PeriodoFilter({ modo, meses, inicio, fim, onChange, width = 190, dataMin, dataMax }: PeriodoFilterProps) {
   const [aberto, setAberto] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -41,9 +44,12 @@ export function PeriodoFilter({ modo, meses, inicio, fim, onChange, width = 190 
   }
 
   function selecionarCustom() {
-    const hoje = new Date().toISOString().slice(0, 10)
-    const trintaDiasAtras = new Date(Date.now() - 29 * 86400000).toISOString().slice(0, 10)
-    onChange('custom', meses, inicio ?? trintaDiasAtras, fim ?? hoje)
+    // Comeca no ultimo mes COM DADO (dataMax), nao em "hoje" - o payload e fechado por
+    // competencia e o mes corrente normalmente ainda nao entrou nele.
+    const fimPadrao = fim ?? dataMax
+    const trintaDiasAntes = new Date(new Date(fimPadrao).getTime() - 29 * 86400000).toISOString().slice(0, 10)
+    const inicioPadrao = inicio ?? (trintaDiasAntes < dataMin ? dataMin : trintaDiasAntes)
+    onChange('custom', meses, inicioPadrao, fimPadrao)
   }
 
   return (
@@ -115,7 +121,8 @@ export function PeriodoFilter({ modo, meses, inicio, fim, onChange, width = 190 
                 <input
                   type="date"
                   value={inicio ?? ''}
-                  max={fim ?? undefined}
+                  min={dataMin}
+                  max={fim ?? dataMax}
                   onChange={(e) => onChange('custom', meses, e.target.value, fim)}
                   style={{ height: 30, borderRadius: 'var(--radius-control)', border: '1px solid var(--border-subtle)', padding: '0 8px', font: 'var(--fw-regular) var(--text-body-sm)/1 var(--font-sans)' }}
                 />
@@ -125,7 +132,8 @@ export function PeriodoFilter({ modo, meses, inicio, fim, onChange, width = 190 
                 <input
                   type="date"
                   value={fim ?? ''}
-                  min={inicio ?? undefined}
+                  min={inicio ?? dataMin}
+                  max={dataMax}
                   onChange={(e) => onChange('custom', meses, inicio, e.target.value)}
                   style={{ height: 30, borderRadius: 'var(--radius-control)', border: '1px solid var(--border-subtle)', padding: '0 8px', font: 'var(--fw-regular) var(--text-body-sm)/1 var(--font-sans)' }}
                 />

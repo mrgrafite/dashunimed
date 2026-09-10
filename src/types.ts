@@ -32,6 +32,10 @@ export interface Historico {
   adm: number[]
   deslig: number[]
   headcount: number[]
+  /** Desligamentos por mes classificados como Voluntario (caudem 3/4/14, planilha oficial "Motivo Desligamentos") - aproximado, soma com Involuntarios fica ABAIXO do `deslig` (gold, exato): "Nao usar" (6/7/12) e caudem fora da planilha ficam de fora dos dois. */
+  desligVoluntarios: number[]
+  /** Desligamentos por mes classificados como Involuntario (caudem 1/2/13) - mesma aproximacao acima. */
+  desligInvoluntarios: number[]
   /** Horas trabalhadas por mes (codsit=1, "Trabalhando") - base do denominador "horas previstas". */
   horasTrabalhadas: number[]
   /** Horas perdidas por mes (codsit: Atestado/Atestado Acompanhante/Horas Justificadas/Falta a Descontar). */

@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Download, X, Users, Wallet, UserPlus, UserMinus, CalendarClock, Thermometer } from 'lucide-react'
+import { Download, X, Users, Wallet, UserPlus, UserMinus, CalendarClock, Thermometer, Gauge, Repeat, LogOut, UserX } from 'lucide-react'
 import { StatCard } from './components/StatCard'
 import { Card } from './components/Card'
 import { BarRow } from './components/BarRow'
 import { EvolutionChart } from './components/EvolutionChart'
-import { TurnoverChart } from './components/TurnoverChart'
 import { AbsenteeismoChart } from './components/AbsenteeismoChart'
 import { AfastamentosChart } from './components/AfastamentosChart'
 import { EmpresaTable } from './components/EmpresaTable'
@@ -25,12 +24,38 @@ const FILTROS_PADRAO: Filters = {
 
 const MS_POR_DIA = 86400000
 
-/** Quantos meses uma janela de dias corridos cobre, arredondado pra cima e limitado a 1-12 -
- * usada so pros widgets mensais (desligamentos/grafico/tabela) quando o modo e '30dias'/'custom',
- * ja que essas fontes nao tem granularidade diaria (ver docstring do adapter). */
-function mesesEquivalentes(inicio: string, fim: string): number {
-  const dias = Math.round((new Date(fim).getTime() - new Date(inicio).getTime()) / MS_POR_DIA) + 1
-  return Math.min(12, Math.max(1, Math.ceil(dias / 30)))
+/** As 12 competencias ('AAAA-MM') da janela do payload, da mais antiga pra mais recente -
+ * derivadas de `payload.competencia` (o ULTIMO mes). Alinhadas por indice com `payload.meses`
+ * e com todos os arrays de 12 posicoes em `historico.*`. */
+function competenciasDoPayload(ultimaCompetencia: string): string[] {
+  const [ano, mes] = ultimaCompetencia.split('-').map(Number)
+  const lista: string[] = []
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(Date.UTC(ano, mes - 1 - i, 1))
+    lista.push(`${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`)
+  }
+  return lista
+}
+
+/** Posicao do mes na janela de 12: -1 se for antes do primeiro, 12 se for depois do ultimo. */
+function posicaoDaCompetencia(competencias: string[], comp: string): number {
+  if (comp < competencias[0]) return -1
+  if (comp > competencias[competencias.length - 1]) return competencias.length
+  return competencias.indexOf(comp)
+}
+
+/** Recorte [ini, fim] (indices nos 12 meses) que a janela de datas cobre, com clamp na borda.
+ * ANTES (bug reportado pelo Marcelo, 2026-09-09) todo widget mensal fatiava `slice(janela.ini, janela.fim + 1)`,
+ * ou seja, sempre os ULTIMOS n meses - no modo Personalizado a data escolhida so mudava a
+ * QUANTIDADE de meses, nunca QUAIS: dois recortes de mesmo tamanho em meses diferentes
+ * mostravam exatamente os mesmos numeros. */
+function janelaDeDatas(competencias: string[], inicio: string, fim: string): { ini: number; fim: number } {
+  const ultimo = competencias.length - 1
+  const brutoIni = posicaoDaCompetencia(competencias, inicio.slice(0, 7))
+  const brutoFim = posicaoDaCompetencia(competencias, fim.slice(0, 7))
+  const ini = Math.min(ultimo, Math.max(0, brutoIni))
+  const fimIdx = Math.max(0, Math.min(ultimo, brutoFim))
+  return { ini: Math.min(ini, fimIdx), fim: Math.max(ini, fimIdx) }
 }
 
 /** Todo filtro vazio ([]) significa "todos" - sem restricao nessa dimensao. */
@@ -96,37 +121,53 @@ function App() {
     // Periodo tem 3 modos (ver PeriodoModo em types.ts): preset em meses (como sempre foi),
     // "30 dias" ou "personalizado" (dia exato). Os 2 ultimos so tem granularidade diaria de
     // verdade pra admissoes (ver admissoesEventos abaixo) - pros widgets so-mensais
-    // (desligamentos/grafico/tabela "Por empresa"), caem pro numero de meses mais proximo
-    // que cobre a janela (aproximado, ja que a fonte gold nao tem grao diario).
-    const n =
+    // (desligamentos/grafico/tabela "Por empresa") a janela e arredondada pros meses que o
+    // recorte cobre, mas agora respeitando QUAIS meses sao (ver janelaDeDatas).
+    const competencias = competenciasDoPayload(payload.competencia)
+    const hojeIso = new Date().toISOString().slice(0, 10)
+    const janela =
       filters.periodoModo === 'meses'
-        ? filters.periodoMeses
+        ? { ini: 12 - filters.periodoMeses, fim: 11 }
         : filters.periodoModo === '30dias'
-          ? 1
+          ? janelaDeDatas(competencias, new Date(Date.now() - 29 * MS_POR_DIA).toISOString().slice(0, 10), hojeIso)
           : filters.periodoInicio && filters.periodoFim
-            ? mesesEquivalentes(filters.periodoInicio, filters.periodoFim)
-            : 1
-    const labels = payload.meses.slice(12 - n)
+            ? janelaDeDatas(competencias, filters.periodoInicio, filters.periodoFim)
+            : { ini: 11, fim: 11 }
+    const n = janela.fim - janela.ini + 1
+    const labels = payload.meses.slice(janela.ini, janela.fim + 1)
     const deslig = new Array(n).fill(0)
+    const desligVoluntarios = new Array(n).fill(0)
+    const desligInvoluntarios = new Array(n).fill(0)
     const headcountMensal = new Array(n).fill(0)
     const horasTrabalhadas = new Array(n).fill(0)
     const horasCurto = new Array(n).fill(0)
     const horasLongo = new Array(n).fill(0)
     const horasFaltas = new Array(n).fill(0)
     emps.forEach((e) => {
-      e.historico.deslig.slice(12 - n).forEach((v, i) => (deslig[i] += v))
-      e.historico.headcount.slice(12 - n).forEach((v, i) => (headcountMensal[i] += v))
-      e.historico.horasTrabalhadas.slice(12 - n).forEach((v, i) => (horasTrabalhadas[i] += v))
-      e.historico.horasAbsenteismoCurto.slice(12 - n).forEach((v, i) => (horasCurto[i] += v))
-      e.historico.horasAbsenteismoLongo.slice(12 - n).forEach((v, i) => (horasLongo[i] += v))
-      e.historico.horasFaltas.slice(12 - n).forEach((v, i) => (horasFaltas[i] += v))
+      e.historico.deslig.slice(janela.ini, janela.fim + 1).forEach((v, i) => (deslig[i] += v))
+      e.historico.desligVoluntarios.slice(janela.ini, janela.fim + 1).forEach((v, i) => (desligVoluntarios[i] += v))
+      e.historico.desligInvoluntarios.slice(janela.ini, janela.fim + 1).forEach((v, i) => (desligInvoluntarios[i] += v))
+      e.historico.headcount.slice(janela.ini, janela.fim + 1).forEach((v, i) => (headcountMensal[i] += v))
+      e.historico.horasTrabalhadas.slice(janela.ini, janela.fim + 1).forEach((v, i) => (horasTrabalhadas[i] += v))
+      e.historico.horasAbsenteismoCurto.slice(janela.ini, janela.fim + 1).forEach((v, i) => (horasCurto[i] += v))
+      e.historico.horasAbsenteismoLongo.slice(janela.ini, janela.fim + 1).forEach((v, i) => (horasLongo[i] += v))
+      e.historico.horasFaltas.slice(janela.ini, janela.fim + 1).forEach((v, i) => (horasFaltas[i] += v))
     })
     const totalDeslig = deslig.reduce((s, v) => s + v, 0)
+    const totalDesligVoluntarios = desligVoluntarios.reduce((s, v) => s + v, 0)
+    const totalDesligInvoluntarios = desligInvoluntarios.reduce((s, v) => s + v, 0)
     // Denominador do Turnover: media do total_headcount mensal (gold) ao longo do periodo
     // selecionado - formula que o Marcelo passou por exemplo (media inicio/fim do mes,
     // generalizada pros N meses da janela), nao um snapshot unico (nem gold do fim do
     // periodo, nem bronze de hoje).
     const headcountMedioPeriodo = headcountMensal.reduce((s, v) => s + v, 0) / n
+    // Turnover Voluntario/Involuntario (pedido do Marcelo, 2026-09-09, card no lugar do
+    // grafico "Turnover mensal") - formula do design (turnover.png): Desligamentos [tipo] /
+    // HC Medio x 100, SEM dividir por 2 (diferente do Turnover Geral acima, que e a media
+    // entre admissoes e desligamentos). Classificacao via caudem (ver item 11 do docstring
+    // do adapter) - aproximado, os dois juntos ficam abaixo do total de Desligamentos exato.
+    const turnoverVoluntarioPct = headcountMedioPeriodo ? ((totalDesligVoluntarios / headcountMedioPeriodo) * 100).toFixed(1) : '0.0'
+    const turnoverInvoluntarioPct = headcountMedioPeriodo ? ((totalDesligInvoluntarios / headcountMedioPeriodo) * 100).toFixed(1) : '0.0'
 
     // Absenteismo (pedido do Marcelo, 2026-09-05, refeito em 2026-09-08 com bronze_rhp_r066sit
     // - ver item 10 do docstring do adapter) - formula EXATA do dicionario oficial: horas
@@ -154,7 +195,7 @@ function App() {
     // novo em cada mes que ficou afastada).
     const afastadosDistintosMensal = new Array(n).fill(0)
     emps.forEach((e) => {
-      e.historico.afastadosDistintos.slice(12 - n).forEach((v, i) => (afastadosDistintosMensal[i] += v))
+      e.historico.afastadosDistintos.slice(janela.ini, janela.fim + 1).forEach((v, i) => (afastadosDistintosMensal[i] += v))
     })
     const taxaAfastadosMensal = afastadosDistintosMensal.map((v, i) => (headcountMensal[i] ? (v / headcountMensal[i]) * 100 : 0))
     const taxaAfastadosPct = taxaAfastadosMensal.length
@@ -164,7 +205,7 @@ function App() {
     const motivoMap = new Map<string, number>()
     emps.forEach((e) =>
       e.afastamentosPorMotivo.forEach((m) => {
-        const soma = m.valores.slice(12 - n).reduce((s, v) => s + v, 0)
+        const soma = m.valores.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
         motivoMap.set(m.motivo, (motivoMap.get(m.motivo) ?? 0) + soma)
       })
     )
@@ -177,21 +218,21 @@ function App() {
     // proximos cards tambem). Cada linha usa SO os dados daquela empresa, no mesmo periodo (n
     // meses) selecionado no filtro.
     const empresaAfastamentoRows = emps.map((e) => {
-      const hcMensalEmpresa = e.historico.headcount.slice(12 - n)
-      const afastadosMensalEmpresa = e.historico.afastadosDistintos.slice(12 - n)
+      const hcMensalEmpresa = e.historico.headcount.slice(janela.ini, janela.fim + 1)
+      const afastadosMensalEmpresa = e.historico.afastadosDistintos.slice(janela.ini, janela.fim + 1)
       const taxasMensais = afastadosMensalEmpresa.map((v, i) => (hcMensalEmpresa[i] ? (v / hcMensalEmpresa[i]) * 100 : 0))
       const taxaAfastamento = taxasMensais.length ? taxasMensais.reduce((s, v) => s + v, 0) / taxasMensais.length : 0
 
-      const horasTrabalhadasEmpresa = e.historico.horasTrabalhadas.slice(12 - n).reduce((s, v) => s + v, 0)
-      const horasCurtoEmpresa = e.historico.horasAbsenteismoCurto.slice(12 - n).reduce((s, v) => s + v, 0)
-      const horasLongoEmpresa = e.historico.horasAbsenteismoLongo.slice(12 - n).reduce((s, v) => s + v, 0)
-      const horasFaltasEmpresa = e.historico.horasFaltas.slice(12 - n).reduce((s, v) => s + v, 0)
+      const horasTrabalhadasEmpresa = e.historico.horasTrabalhadas.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const horasCurtoEmpresa = e.historico.horasAbsenteismoCurto.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const horasLongoEmpresa = e.historico.horasAbsenteismoLongo.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const horasFaltasEmpresa = e.historico.horasFaltas.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
       const horasPrevistasEmpresa = horasTrabalhadasEmpresa + horasCurtoEmpresa + horasLongoEmpresa + horasFaltasEmpresa
       const absenteismoCurto = horasPrevistasEmpresa ? (horasCurtoEmpresa / horasPrevistasEmpresa) * 100 : 0
       const absenteismoTotal = horasPrevistasEmpresa ? ((horasCurtoEmpresa + horasLongoEmpresa) / horasPrevistasEmpresa) * 100 : 0
       const faltas = horasPrevistasEmpresa ? (horasFaltasEmpresa / horasPrevistasEmpresa) * 100 : 0
 
-      const diasTodosMotivos = e.afastamentosPorMotivo.reduce((s, m) => s + m.valores.slice(12 - n).reduce((s2, v) => s2 + v, 0), 0)
+      const diasTodosMotivos = e.afastamentosPorMotivo.reduce((s, m) => s + m.valores.slice(janela.ini, janela.fim + 1).reduce((s2, v) => s2 + v, 0), 0)
 
       return { nome: e.nome, taxaAfastamento, diasTodosMotivos, absenteismoCurto, absenteismoTotal, faltas }
     })
@@ -213,7 +254,7 @@ function App() {
     // outros filtros - mesma limitacao ja documentada na tabela "Por empresa").
     const custoFolhaDept = emps.reduce((s, e) => {
       const empresaCusto = custoPayload?.empresas.find((c) => c.id === e.id)
-      return s + (empresaCusto ? empresaCusto.historico.folha.slice(12 - n).reduce((s2, v) => s2 + v, 0) : 0)
+      return s + (empresaCusto ? empresaCusto.historico.folha.slice(janela.ini, janela.fim + 1).reduce((s2, v) => s2 + v, 0) : 0)
     }, 0)
     const colabParaMediaCusto = emps.reduce((s, e) => s + e.colaboradores.length, 0)
 
@@ -228,7 +269,7 @@ function App() {
     // (fonte c). Desligamentos NAO tem regra exata equivalente - continua vindo so do historico
     // gold acima, sem reagir ao filtro de Contrato.
     const competenciasRaw = [...new Set(emps.flatMap((e) => e.admissoesContrato.map((a) => a.competencia)))].sort()
-    const competenciasJanela = competenciasRaw.slice(12 - n)
+    const competenciasJanela = competenciasRaw.slice(janela.ini, janela.fim + 1)
     const adm = new Array(n).fill(0)
     emps.forEach((e) => {
       e.admissoesContrato.forEach((ev) => {
@@ -249,8 +290,6 @@ function App() {
     // baseline de 3% (pedido do Marcelo, 2026-09-05). Admissoes aqui reagem ao filtro de
     // Contrato (mesmo `adm` usado no resto do painel); headcount de cada mes como base
     // (nao a media do periodo inteiro, que so faz sentido pro numero agregado do KPI).
-    const turnoverMensal = headcountMensal.map((hc, i) => (hc ? ((adm[i] + deslig[i]) / 2 / hc) * 100 : 0))
-
     // Turnover por empresa (pedido 2026-09-07, mesmo padrao "por empresa/periodo" da tabela
     // "Afastamentos e Absenteismo por empresa") - cada linha usa so as admissoes/desligamentos/
     // headcount DAQUELA empresa, mesma formula do KPI agregado acima.
@@ -262,8 +301,8 @@ function App() {
         if (idx >= 0) admEmpresa[idx] += ev.adm
       })
       const totalAdmEmpresa = admEmpresa.reduce((s, v) => s + v, 0)
-      const totalDesligEmpresa = e.historico.deslig.slice(12 - n).reduce((s, v) => s + v, 0)
-      const headcountMedioEmpresa = e.historico.headcount.slice(12 - n).reduce((s, v) => s + v, 0) / n
+      const totalDesligEmpresa = e.historico.deslig.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const headcountMedioEmpresa = e.historico.headcount.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) / n
       const turnover = headcountMedioEmpresa ? ((totalAdmEmpresa + totalDesligEmpresa) / 2 / headcountMedioEmpresa) * 100 : 0
       return { nome: e.nome, totalAdmEmpresa, totalDesligEmpresa, turnover }
     })
@@ -295,25 +334,12 @@ function App() {
     const totalAdmKpi = exatoAdm ? exatoAdm.total : totalAdm
     const admissoesJanelaLabel = exatoAdm ? exatoAdm.label : `${n} ${n === 1 ? 'mês' : 'meses'}`
 
-    // Desligamentos NAO usa desligamentosEventos pra KPI ainda (ver docstring do adapter,
-    // item 7b) - a regra sitafa=7 tem ruido residual (causas de afastamento que nao
-    // correspondem a demissao real) que nao foi possivel isolar 100% contra o R042RCM
-    // oficial. Fica so mensal (historico.deslig, gold, ja validado 100%) ate reconciliar.
+    // Desligamentos continua so mensal (sem o filtro fino de dia que Admissoes tem).
+    // Desde 2026-09-09 `historico.deslig` vem do BRONZE (Voluntarios+Involuntarios por
+    // caudem, item 11 do adapter), nao mais do gold - decisao do Marcelo, o bronze e
+    // espelho direto do HCM (mais atual) e o gold so e recalculado em lote.
     const totalDesligKpi = totalDeslig
     const desligamentosJanelaLabel = `${n} ${n === 1 ? 'mês' : 'meses'}`
-
-    const deptBronzeMap = new Map<string, number>()
-    filtrarColaboradores(pessoasBase, filters, ['departamento']).forEach((p) =>
-      deptBronzeMap.set(p.centroCusto, (deptBronzeMap.get(p.centroCusto) ?? 0) + 1)
-    )
-    const deptBronzeAll = [...deptBronzeMap.entries()].map(([nome, atual]) => ({ nome, atual })).sort((a, b) => b.atual - a.atual)
-    const deptBronzeFiltrado = deptBronzeAll.filter((d) => combina(filters.departamento, d.nome))
-    const maxDeptVal = Math.max(1, ...deptBronzeAll.map((r) => r.atual))
-
-    const cargoMap = new Map<string, number>()
-    pessoasFiltradas.forEach((p) => cargoMap.set(p.cargo, (cargoMap.get(p.cargo) ?? 0) + 1))
-    const cargoList = [...cargoMap.entries()].map(([cargo, count]) => ({ cargo, count })).sort((a, b) => b.count - a.count)
-    const maxCargo = Math.max(1, ...cargoList.map((c) => c.count))
 
     const contratoMap: Record<string, number> = { CLT: 0, PJ: 0, 'Estágio': 0, Aprendiz: 0, Diretor: 0, 'Temporários': 0, Outros: 0 }
     filtrarColaboradores(pessoasBase, filters, ['contrato']).forEach((p) => {
@@ -338,9 +364,9 @@ function App() {
       // Jan/2026 (custoPayload.primeiroMesComDado), meses antes disso somam 0.
       const atual = e.colaboradores.length
       const empresaCusto = custoPayload?.empresas.find((c) => c.id === e.id)
-      const custo = empresaCusto ? empresaCusto.historico.folha.slice(12 - n).reduce((s, v) => s + v, 0) : 0
-      const admN = e.historico.adm.slice(12 - n).reduce((s, v) => s + v, 0)
-      const desligN = e.historico.deslig.slice(12 - n).reduce((s, v) => s + v, 0)
+      const custo = empresaCusto ? empresaCusto.historico.folha.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) : 0
+      const admN = e.historico.adm.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
+      const desligN = e.historico.deslig.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0)
       return { nome: e.nome, atual, custo, adm: admN, deslig: desligN }
     })
 
@@ -348,10 +374,10 @@ function App() {
     // do `custo` acima, mas com a quebra Folha/Encargos/Beneficios/Rescisao (nao so Folha).
     const empresaCustoDetalhado = emps.map((e) => {
       const empresaCusto = custoPayload?.empresas.find((c) => c.id === e.id)
-      const folhaEmpresa = empresaCusto ? empresaCusto.historico.folha.slice(12 - n).reduce((s, v) => s + v, 0) : 0
-      const encargosEmpresa = empresaCusto ? empresaCusto.historico.encargos.slice(12 - n).reduce((s, v) => s + v, 0) : 0
-      const beneficioEmpresa = empresaCusto ? empresaCusto.historico.beneficio.slice(12 - n).reduce((s, v) => s + v, 0) : 0
-      const rescisaoEmpresa = empresaCusto ? empresaCusto.historico.rescisao.slice(12 - n).reduce((s, v) => s + v, 0) : 0
+      const folhaEmpresa = empresaCusto ? empresaCusto.historico.folha.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) : 0
+      const encargosEmpresa = empresaCusto ? empresaCusto.historico.encargos.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) : 0
+      const beneficioEmpresa = empresaCusto ? empresaCusto.historico.beneficio.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) : 0
+      const rescisaoEmpresa = empresaCusto ? empresaCusto.historico.rescisao.slice(janela.ini, janela.fim + 1).reduce((s, v) => s + v, 0) : 0
       const totalEmpresa = folhaEmpresa + encargosEmpresa + beneficioEmpresa + rescisaoEmpresa
       return { nome: e.nome, folhaEmpresa, encargosEmpresa, beneficioEmpresa, rescisaoEmpresa, totalEmpresa }
     })
@@ -363,7 +389,7 @@ function App() {
       const empresaProvisao = provisaoPayload?.empresas.find((p) => p.id === e.id)
       const saldoPorTipo: Record<string, number> = {}
       ;(provisaoPayload?.tipos ?? []).forEach((tipo) => {
-        const serie = empresaProvisao?.provisao[tipo]?.sldatu.slice(12 - n)
+        const serie = empresaProvisao?.provisao[tipo]?.sldatu.slice(janela.ini, janela.fim + 1)
         saldoPorTipo[tipo] = serie && serie.length ? serie[serie.length - 1] : 0
       })
       return { nome: e.nome, saldoPorTipo }
@@ -377,16 +403,26 @@ function App() {
       .sort()
       .map((l) => ({ value: l, label: l }))
 
-    const nMesesLabel = filters.periodoModo === 'meses' ? `${n} meses` : `~${n} ${n === 1 ? 'mês' : 'meses'} (aprox. p/ este recorte)`
+    const nMesesLabel =
+      filters.periodoModo === 'meses'
+        ? `${n} meses`
+        : `${labels[0]}–${labels[labels.length - 1]} (${n} ${n === 1 ? 'mês' : 'meses'}, aprox. p/ este recorte)`
+
+    // Limites do seletor de data: a janela de 12 meses que o payload cobre (evita escolher
+    // um recorte fora do dado, que nao teria como ser respondido).
+    const [anoFim, mesFim] = competencias[11].split('-').map(Number)
+    const dataMin = `${competencias[0]}-01`
+    const dataMax = `${competencias[11]}-${String(new Date(Date.UTC(anoFim, mesFim, 0)).getUTCDate()).padStart(2, '0')}`
 
     return {
-      n, nMesesLabel, deptBronzeFiltrado, totalColabDept, custoFolhaDept, colabParaMediaCusto, idadeMedia, tempoAnos, tempoMesesResto,
-      labels, adm, deslig, totalAdm, totalAdmKpi, admissoesJanelaLabel,
-      totalDeslig, totalDesligKpi, desligamentosJanelaLabel, turnoverPct, turnoverMensal, empresaTurnoverRows, maxDeptVal,
+      n, nMesesLabel, totalColabDept, custoFolhaDept, colabParaMediaCusto, idadeMedia, tempoAnos, tempoMesesResto,
+      labels, adm, deslig, totalAdm, totalAdmKpi, admissoesJanelaLabel, headcountMedioPeriodo,
+      totalDeslig, totalDesligKpi, desligamentosJanelaLabel, turnoverPct, empresaTurnoverRows,
+      totalDesligVoluntarios, totalDesligInvoluntarios, turnoverVoluntarioPct, turnoverInvoluntarioPct,
       absenteismoCurtoPct, absenteismoTotalPct, absenteismoCurtoMensal, absenteismoTotalMensal, faltasPct, faltasMensal,
       taxaAfastadosPct, taxaAfastadosMensal, motivoList, totalDiasMotivos, maxMotivo, empresaAfastamentoRows,
-      cargoList, maxCargo, contratoMap, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows,
-      empresaOptionsMulti, departamentoOptionsMulti, localizacaoOptionsMulti,
+      contratoMap, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows,
+      empresaOptionsMulti, departamentoOptionsMulti, localizacaoOptionsMulti, dataMin, dataMax,
     }
   }, [payload, filters, custoPayload, provisaoPayload])
 
@@ -465,6 +501,8 @@ function App() {
           inicio={filters.periodoInicio}
           fim={filters.periodoFim}
           onChange={(modo, meses, inicio, fim) => setFilters((f) => ({ ...f, periodoModo: modo, periodoMeses: meses, periodoInicio: inicio, periodoFim: fim }))}
+          dataMin={derivado.dataMin}
+          dataMax={derivado.dataMax}
         />
         <MultiSelect label="Tipo de contrato" values={filters.contrato} options={[{ value: 'CLT', label: 'CLT' }, { value: 'PJ', label: 'PJ' }, { value: 'Estágio', label: 'Estágio' }, { value: 'Aprendiz', label: 'Aprendiz' }, { value: 'Diretor', label: 'Diretor' }, { value: 'Temporários', label: 'Temporários' }, { value: 'Outros', label: 'Outros' }]} onChange={(v) => setFilter('contrato', v)} width={170} placeholderTodos="Todos os contratos" />
         <button
@@ -555,6 +593,8 @@ function App() {
           inicio={filters.periodoInicio}
           fim={filters.periodoFim}
           onChange={(modo, meses, inicio, fim) => setFilters((f) => ({ ...f, periodoModo: modo, periodoMeses: meses, periodoInicio: inicio, periodoFim: fim }))}
+          dataMin={derivado.dataMin}
+          dataMax={derivado.dataMax}
         />
         <MultiSelect label="Tipo de contrato" values={filters.contrato} options={[{ value: 'CLT', label: 'CLT' }, { value: 'PJ', label: 'PJ' }, { value: 'Estágio', label: 'Estágio' }, { value: 'Aprendiz', label: 'Aprendiz' }, { value: 'Diretor', label: 'Diretor' }, { value: 'Temporários', label: 'Temporários' }, { value: 'Outros', label: 'Outros' }]} onChange={(v) => setFilter('contrato', v)} width={170} placeholderTodos="Todos os contratos" />
         <MultiSelect label="Localização" values={filters.localizacao} options={derivado.localizacaoOptionsMulti} onChange={(v) => setFilter('localizacao', v)} width={220} placeholderTodos="Todas as localizações" />
@@ -570,31 +610,33 @@ function App() {
         <StatCard label="Colaboradores ativos" value={num(derivado.totalColabDept)} hint="aproximado, reage a todos os filtros" icon={<Users size={18} strokeWidth={1.75} />} />
         <StatCard label="Custo de folha" value={brl(derivado.custoFolhaDept)} hint={derivado.colabParaMediaCusto ? `${derivado.nMesesLabel} · média ${brl(derivado.custoFolhaDept / derivado.colabParaMediaCusto)}/colab.` : ''} icon={<Wallet size={18} strokeWidth={1.75} />} />
         <StatCard label="Admissões no período" value={num(derivado.totalAdmKpi)} hint={`${derivado.admissoesJanelaLabel} · reage ao contrato`} icon={<UserPlus size={18} strokeWidth={1.75} />} />
-        <StatCard label="Desligamentos" value={num(derivado.totalDesligKpi)} hint={`${derivado.desligamentosJanelaLabel} · turnover ${derivado.turnoverPct}%`} icon={<UserMinus size={18} strokeWidth={1.75} />} />
+        <StatCard label="Desligamentos" value={num(derivado.totalDesligKpi)} hint={derivado.desligamentosJanelaLabel} icon={<UserMinus size={18} strokeWidth={1.75} />} />
         <StatCard label="Tempo médio de casa" value={`${derivado.tempoAnos}a ${derivado.tempoMesesResto}m`} hint={`${derivado.idadeMedia} anos de idade média`} icon={<CalendarClock size={18} strokeWidth={1.75} />} />
         <StatCard label="Absenteísmo" value={`${derivado.absenteismoTotalPct}%`} hint={`curto ${derivado.absenteismoCurtoPct}% · ${derivado.nMesesLabel}`} icon={<Thermometer size={18} strokeWidth={1.75} />} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 20, alignItems: 'start' }}>
-        <Card title="Headcount por departamento" subtitle="Centro de custo · aproximado, reage ao filtro de contrato/localização — ver nota de qualidade de dado">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxHeight: 400, overflow: 'auto' }}>
-            {derivado.deptBronzeFiltrado.slice(0, 30).map((d) => (
-              <BarRow key={d.nome} label={d.nome} valueLabel={num(d.atual)} fraction={d.atual / derivado.maxDeptVal} height={10} />
-            ))}
-          </div>
-        </Card>
-        <Card title="Cargo / senioridade" subtitle="Aproximado — ver nota de qualidade de dado" bodyPadding="18px 20px">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxHeight: 340, overflow: 'auto' }}>
-            {derivado.cargoList.slice(0, 30).map((c) => (
-              <BarRow key={c.cargo} label={c.cargo} valueLabel={num(c.count)} fraction={c.count / derivado.maxCargo} color="var(--azure-400)" />
-            ))}
-          </div>
-        </Card>
+      <div style={{ display: 'flex', gap: 16 }}>
+        <div style={{ width: 260 }}>
+          <StatCard
+            label="HC Médio"
+            value={num(Math.round(derivado.headcountMedioPeriodo))}
+            hint={`(HC inicial + HC final do mês) / 2 · ${derivado.nMesesLabel}`}
+            icon={<Gauge size={18} strokeWidth={1.75} />}
+          />
+        </div>
+        <div style={{ width: 260 }}>
+          <StatCard
+            label="Turnover Geral"
+            value={`${derivado.turnoverPct}%`}
+            hint="(Admissões + Desligamentos) / 2 ÷ HC Médio"
+            icon={<Repeat size={18} strokeWidth={1.75} />}
+          />
+        </div>
       </div>
 
       <Card
         title="Evolução — admissões x desligamentos"
-        subtitle={`${derivado.nMesesLabel} · admissões reagem ao contrato, desligamentos não (exato)`}
+        subtitle={`${derivado.nMesesLabel} · admissões reagem ao contrato, desligamentos não · fonte bronze (espelho do HCM)`}
         right={
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
@@ -614,16 +656,25 @@ function App() {
         <EvolutionChart meses={derivado.labels} adm={derivado.adm} deslig={derivado.deslig} />
       </Card>
 
-      <Card
-        title="Turnover mensal"
-        subtitle={`${derivado.nMesesLabel} · (admissões + desligamentos) / 2 ÷ headcount do mês · baseline 3%`}
-        right={
-          <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
-            Média do período · <span className="tabular" style={{ color: 'var(--text-strong)', fontWeight: 600 }}>{derivado.turnoverPct}%</span>
-          </span>
-        }
-      >
-        <TurnoverChart meses={derivado.labels} turnover={derivado.turnoverMensal} baseline={3} />
+      <Card title="Turnover Voluntário x Involuntário" subtitle={`${derivado.nMesesLabel} · Desligamentos [tipo] ÷ HC Médio × 100 · classificação oficial por causa de demissão (planilha "Motivo Desligamentos") · os dois somam exatamente o KPI "Desligamentos"`} bodyPadding="18px 20px">
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 260px' }}>
+            <StatCard
+              label="Turnover Voluntário"
+              value={`${derivado.turnoverVoluntarioPct}%`}
+              hint={`Pedido de demissão do colaborador · ${num(derivado.totalDesligVoluntarios)} desligamentos`}
+              icon={<LogOut size={18} strokeWidth={1.75} />}
+            />
+          </div>
+          <div style={{ flex: '1 1 260px' }}>
+            <StatCard
+              label="Turnover Involuntário"
+              value={`${derivado.turnoverInvoluntarioPct}%`}
+              hint={`Desligamento por decisão da empresa · ${num(derivado.totalDesligInvoluntarios)} desligamentos`}
+              icon={<UserX size={18} strokeWidth={1.75} />}
+            />
+          </div>
+        </div>
       </Card>
 
       <Card
