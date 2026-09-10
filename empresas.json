@@ -104,44 +104,19 @@
           "custo": 45068.72
         },
         {
-          "nome": "GERENCIA DE MERCADO E VENDAS",
-          "atual": 11,
-          "custo": 36513.73
-        },
-        {
           "nome": "GERENCIA DE MARKETING E COMUNICACAO",
           "atual": 11,
           "custo": 63578.51
         },
         {
+          "nome": "GERENCIA DE MERCADO E VENDAS",
+          "atual": 11,
+          "custo": 36513.73
+        },
+        {
           "nome": "GERENCIAMENTO DE CASOS ESPECIAIS (108820) SAD",
           "atual": 11,
           "custo": 44034.23
-        },
-        {
-          "nome": "FISIOTERAPIA",
-          "atual": 10,
-          "custo": 40959.7
-        },
-        {
-          "nome": "AREA DE GOVERNANCA",
-          "atual": 10,
-          "custo": 87665.03
-        },
-        {
-          "nome": "GERENCIA JURIDICO",
-          "atual": 10,
-          "custo": 74606.99
-        },
-        {
-          "nome": "ENFERMAGEM (ONCOLOGIA)",
-          "atual": 10,
-          "custo": 59573.8
-        },
-        {
-          "nome": "ADMINISTRATIVO SOU",
-          "atual": 10,
-          "custo": 31319.91
         },
         {
           "nome": "E+U SHOPPING ATENCAO PRIMARIA A SAUDE",
@@ -152,6 +127,31 @@
           "nome": "RECEPCAO",
           "atual": 10,
           "custo": 19866.8
+        },
+        {
+          "nome": "ENFERMAGEM (ONCOLOGIA)",
+          "atual": 10,
+          "custo": 59573.8
+        },
+        {
+          "nome": "AREA DE GOVERNANCA",
+          "atual": 10,
+          "custo": 87665.03
+        },
+        {
+          "nome": "ADMINISTRATIVO SOU",
+          "atual": 10,
+          "custo": 31319.91
+        },
+        {
+          "nome": "FISIOTERAPIA",
+          "atual": 10,
+          "custo": 40959.7
+        },
+        {
+          "nome": "GERENCIA JURIDICO",
+          "atual": 10,
+          "custo": 74606.99
         },
         {
           "nome": "PSICOLOGIA",
@@ -179,6 +179,21 @@
           "custo": 12968.0
         },
         {
+          "nome": "E+U MARILEUSA RECEPCAO",
+          "atual": 7,
+          "custo": 13733.87
+        },
+        {
+          "nome": "DEPARTAMENTO PESSOAL",
+          "atual": 7,
+          "custo": 35325.51
+        },
+        {
+          "nome": "E+U SHOPPING AMBULATORIO DE PROCEDIMENTOS",
+          "atual": 7,
+          "custo": 27797.03
+        },
+        {
           "nome": "ADMINISTRATIVO (ONCOLOGIA)",
           "atual": 7,
           "custo": 32903.2
@@ -189,19 +204,9 @@
           "custo": 34281.1
         },
         {
-          "nome": "DEPARTAMENTO PESSOAL",
+          "nome": "CONTROLADORIA",
           "atual": 7,
-          "custo": 35325.51
-        },
-        {
-          "nome": "E+U MARILEUSA RECEPCAO",
-          "atual": 7,
-          "custo": 13733.87
-        },
-        {
-          "nome": "E+U SHOPPING AMBULATORIO DE PROCEDIMENTOS",
-          "atual": 7,
-          "custo": 27797.03
+          "custo": 45782.18
         },
         {
           "nome": "CLINICA DE ESPECIALIDADES SEMPRE",
@@ -209,9 +214,19 @@
           "custo": 22020.6
         },
         {
-          "nome": "CONTROLADORIA",
-          "atual": 7,
-          "custo": 45782.18
+          "nome": "COORDENACAO ATUARIAL E SINISTRALIDADE",
+          "atual": 6,
+          "custo": 63689.11
+        },
+        {
+          "nome": "MATERNO INFANTIL (184872)",
+          "atual": 6,
+          "custo": 22926.43
+        },
+        {
+          "nome": "OUVIDORIA",
+          "atual": 6,
+          "custo": 31459.86
         },
         {
           "nome": "RECEPCAO ATENDIMENTO (ONCOLOGIA)",
@@ -224,11 +239,6 @@
           "custo": 24324.34
         },
         {
-          "nome": "MATERNO INFANTIL (184872)",
-          "atual": 6,
-          "custo": 22926.43
-        },
-        {
           "nome": "INTELIGENCIA DE DADOS E PARAMENTROS",
           "atual": 6,
           "custo": 44079.8
@@ -239,34 +249,9 @@
           "custo": 36361.64
         },
         {
-          "nome": "OUVIDORIA",
-          "atual": 6,
-          "custo": 31459.86
-        },
-        {
-          "nome": "COORDENACAO ATUARIAL E SINISTRALIDADE",
-          "atual": 6,
-          "custo": 63689.11
-        },
-        {
-          "nome": "GERENCIA DE TI",
+          "nome": "EQUIPE MULTIDISCIPLINAR",
           "atual": 5,
-          "custo": 47501.74
-        },
-        {
-          "nome": "COORDENACAO DE VENDAS",
-          "atual": 5,
-          "custo": 20803.49
-        },
-        {
-          "nome": "E+U VASCONCELOS ATENCAO PRIMARIA A SAUDE",
-          "atual": 5,
-          "custo": 22597.49
-        },
-        {
-          "nome": "SERVICO DE ATENCAO DOMICILIAR SAD",
-          "atual": 5,
-          "custo": 25780.63
+          "custo": 16429.28
         },
         {
           "nome": "FARMACIA ONCOLOGIA",
@@ -274,9 +259,14 @@
           "custo": 25567.13
         },
         {
-          "nome": "QUALIDADE",
+          "nome": "GERENCIA DE TI",
           "atual": 5,
-          "custo": 28203.92
+          "custo": 47501.74
+        },
+        {
+          "nome": "E+U VASCONCELOS ATENCAO PRIMARIA A SAUDE",
+          "atual": 5,
+          "custo": 22597.49
         },
         {
           "nome": "COORDENACAO INFRAESTRUTURA",
@@ -284,24 +274,19 @@
           "custo": 45750.48
         },
         {
-          "nome": "EQUIPE MULTIDISCIPLINAR",
+          "nome": "COORDENACAO DE VENDAS",
           "atual": 5,
-          "custo": 16429.28
+          "custo": 20803.49
         },
         {
-          "nome": "GERENCIA DE PROVIMENTO E SAUDE",
-          "atual": 4,
-          "custo": 55874.18
+          "nome": "QUALIDADE",
+          "atual": 5,
+          "custo": 28203.92
         },
         {
-          "nome": "CONSULTA MEDICA TECNICO OCUPACIONAL",
-          "atual": 4,
-          "custo": 11470.35
-        },
-        {
-          "nome": "E+U VASCONCELOS RECEPCAO",
-          "atual": 4,
-          "custo": 6934.56
+          "nome": "SERVICO DE ATENCAO DOMICILIAR SAD",
+          "atual": 5,
+          "custo": 25780.63
         },
         {
           "nome": "GERENCIA DE AUDITORIA INTERNA",
@@ -309,9 +294,14 @@
           "custo": 35882.68
         },
         {
-          "nome": "E+U MARILEUSA ATENCAO MULTIPROFISSIONAL",
+          "nome": "CONSULTA MEDICA TECNICO OCUPACIONAL",
           "atual": 4,
-          "custo": 13708.45
+          "custo": 11470.35
+        },
+        {
+          "nome": "GERENCIA DE PROVIMENTO E SAUDE",
+          "atual": 4,
+          "custo": 55874.18
         },
         {
           "nome": "E + U VASCONCELOS PROCEDIMENTOS",
@@ -319,9 +309,24 @@
           "custo": 17124.95
         },
         {
-          "nome": "COORDENACAO DE OPERACOES",
+          "nome": "E+U MARILEUSA ATENCAO MULTIPROFISSIONAL",
+          "atual": 4,
+          "custo": 13708.45
+        },
+        {
+          "nome": "E+U VASCONCELOS RECEPCAO",
+          "atual": 4,
+          "custo": 6934.56
+        },
+        {
+          "nome": "E+U SHOPPING ATENCAO MULTIPROFISSIONAL",
           "atual": 3,
-          "custo": 34625.07
+          "custo": 10781.97
+        },
+        {
+          "nome": "CENTRAL DE RELACIONAMENTO",
+          "atual": 3,
+          "custo": 12060.39
         },
         {
           "nome": "E+U VASCONCELOS ATENCAO MULTIPROFISSIONAL",
@@ -329,9 +334,9 @@
           "custo": 9099.77
         },
         {
-          "nome": "CENTRAL DE RELACIONAMENTO",
+          "nome": "COORDENACAO DE OPERACOES",
           "atual": 3,
-          "custo": 12060.39
+          "custo": 34625.07
         },
         {
           "nome": "ADMINISTRATIVO AMAR",
@@ -344,19 +349,14 @@
           "custo": 12161.2
         },
         {
-          "nome": "E+U SHOPPING ATENCAO MULTIPROFISSIONAL",
-          "atual": 3,
-          "custo": 10781.97
-        },
-        {
           "nome": "NAVEGACAO DO CUIDADO MEDICINA PREVENTIVA",
           "atual": 3,
           "custo": 12161.2
         },
         {
-          "nome": "E+U MARILEUSA FARMACIA",
+          "nome": "SECRETARIA EXECUTIVA UNIMED",
           "atual": 2,
-          "custo": 9301.03
+          "custo": 8973.9
         },
         {
           "nome": "DIU OPERADORA",
@@ -374,29 +374,9 @@
           "custo": 14588.7
         },
         {
-          "nome": "LINHAS DE CUIDADO MENTE SAUDAVEL",
+          "nome": "E+U SHOPPING ADMINISTRATIVO",
           "atual": 2,
-          "custo": 7892.59
-        },
-        {
-          "nome": "SECRETARIA EXECUTIVA UNIMED",
-          "atual": 2,
-          "custo": 8973.9
-        },
-        {
-          "nome": "SERVICO SOCIAL",
-          "atual": 2,
-          "custo": 5884.68
-        },
-        {
-          "nome": "CONSULTAS MULTI SEMPRE",
-          "atual": 2,
-          "custo": 7306.48
-        },
-        {
-          "nome": "FARMACIA SAD",
-          "atual": 2,
-          "custo": 6452.72
+          "custo": 5071.14
         },
         {
           "nome": "ESPACO DO IDOSO VASCONCELOS",
@@ -404,19 +384,39 @@
           "custo": 4817.48
         },
         {
-          "nome": "E+U SHOPPING ADMINISTRATIVO",
-          "atual": 2,
-          "custo": 5071.14
-        },
-        {
           "nome": "E+U SHOPPING FARMACIA",
           "atual": 2,
           "custo": 10092.78
         },
         {
-          "nome": "ASSESSORIA DE NEGOCIOS",
+          "nome": "LINHAS DE CUIDADO MENTE SAUDAVEL",
+          "atual": 2,
+          "custo": 7892.59
+        },
+        {
+          "nome": "CONSULTAS MULTI SEMPRE",
+          "atual": 2,
+          "custo": 7306.48
+        },
+        {
+          "nome": "SERVICO SOCIAL",
+          "atual": 2,
+          "custo": 5884.68
+        },
+        {
+          "nome": "FARMACIA SAD",
+          "atual": 2,
+          "custo": 6452.72
+        },
+        {
+          "nome": "E+U MARILEUSA FARMACIA",
+          "atual": 2,
+          "custo": 9301.03
+        },
+        {
+          "nome": "COMPLIANCE",
           "atual": 1,
-          "custo": 24674.36
+          "custo": 6938.66
         },
         {
           "nome": "TI OPERADORA",
@@ -424,39 +424,39 @@
           "custo": 6498.65
         },
         {
+          "nome": "GERENCIA DE SERVICOS PROPRIOS NOVOS NEGOCIOS",
+          "atual": 1,
+          "custo": 22000.0
+        },
+        {
+          "nome": "EXAMES SEMPRE",
+          "atual": 1,
+          "custo": 3474.63
+        },
+        {
+          "nome": "MEDICAMENTOS ORAIS (ONCOLOGIA)",
+          "atual": 1,
+          "custo": 5834.34
+        },
+        {
+          "nome": "ASSESSORIA DE NEGOCIOS",
+          "atual": 1,
+          "custo": 24674.36
+        },
+        {
+          "nome": "LINHAS DE CUIDADO DO IDOSO",
+          "atual": 1,
+          "custo": 3946.3
+        },
+        {
+          "nome": "PROCEDIMENTOS SEMPRE",
+          "atual": 1,
+          "custo": 4963.75
+        },
+        {
           "nome": "E+U VASCONCELOS ADMINISTRATIVO",
           "atual": 1,
           "custo": 4076.63
-        },
-        {
-          "nome": "COPA (ONCOLOGIA)",
-          "atual": 1,
-          "custo": 1621.0
-        },
-        {
-          "nome": "ADMINISTRATIVO ADM (EVB)",
-          "atual": 1,
-          "custo": 8254.71
-        },
-        {
-          "nome": "FARMACIA SEMPRE",
-          "atual": 1,
-          "custo": 5042.59
-        },
-        {
-          "nome": "ADMINISTRATIVO SERVICOS PROPRIOS",
-          "atual": 1,
-          "custo": 4673.83
-        },
-        {
-          "nome": "PSICOPEDAGOGIA",
-          "atual": 1,
-          "custo": 3636.6
-        },
-        {
-          "nome": "CUIDADOS PALIATIVOS",
-          "atual": 1,
-          "custo": 6335.15
         },
         {
           "nome": "DIRETORIA DE SERVICOS PROPRIOS",
@@ -469,6 +469,51 @@
           "custo": 2437.85
         },
         {
+          "nome": "CUIDADOS PALIATIVOS",
+          "atual": 1,
+          "custo": 6335.15
+        },
+        {
+          "nome": "GERENCIA ASSISTENCIAL E SERVICOS PROPRIOS",
+          "atual": 1,
+          "custo": 22000.0
+        },
+        {
+          "nome": "ADMINISTRATIVO ADM (EVB)",
+          "atual": 1,
+          "custo": 8254.71
+        },
+        {
+          "nome": "DIRETORIA ADMINISTRATIVA FINANCEIRA",
+          "atual": 1,
+          "custo": 4732.22
+        },
+        {
+          "nome": "FARMACIA SEMPRE",
+          "atual": 1,
+          "custo": 5042.59
+        },
+        {
+          "nome": "E+U VASCONCELOS FARMACIA",
+          "atual": 1,
+          "custo": 4258.44
+        },
+        {
+          "nome": "COPA (ONCOLOGIA)",
+          "atual": 1,
+          "custo": 1621.0
+        },
+        {
+          "nome": "ADMINISTRATIVO SERVICOS PROPRIOS",
+          "atual": 1,
+          "custo": 4673.83
+        },
+        {
+          "nome": "PSICOPEDAGOGIA",
+          "atual": 1,
+          "custo": 3636.6
+        },
+        {
           "nome": "FONOAUDIOLOGIA",
           "atual": 1,
           "custo": 4417.91
@@ -477,51 +522,6 @@
           "nome": "ADMINISTRATIVO SAD",
           "atual": 1,
           "custo": 10901.17
-        },
-        {
-          "nome": "GERENCIA DE SERVICOS PROPRIOS NOVOS NEGOCIOS",
-          "atual": 1,
-          "custo": 22000.0
-        },
-        {
-          "nome": "LINHAS DE CUIDADO DO IDOSO",
-          "atual": 1,
-          "custo": 3946.3
-        },
-        {
-          "nome": "COMPLIANCE",
-          "atual": 1,
-          "custo": 6938.66
-        },
-        {
-          "nome": "PROCEDIMENTOS SEMPRE",
-          "atual": 1,
-          "custo": 4963.75
-        },
-        {
-          "nome": "MEDICAMENTOS ORAIS (ONCOLOGIA)",
-          "atual": 1,
-          "custo": 5834.34
-        },
-        {
-          "nome": "E+U VASCONCELOS FARMACIA",
-          "atual": 1,
-          "custo": 4258.44
-        },
-        {
-          "nome": "EXAMES SEMPRE",
-          "atual": 1,
-          "custo": 3474.63
-        },
-        {
-          "nome": "DIRETORIA ADMINISTRATIVA FINANCEIRA",
-          "atual": 1,
-          "custo": 4732.22
-        },
-        {
-          "nome": "GERENCIA ASSISTENCIAL E SERVICOS PROPRIOS",
-          "atual": 1,
-          "custo": 22000.0
         }
       ],
       "colaboradores": [
@@ -5629,15 +5629,6 @@
           "tempoCasaMeses": 0
         },
         {
-          "centroCusto": "GERENCIA JURIDICO",
-          "cargo": "ADVOGADO(A) PL",
-          "contrato": "CLT",
-          "filial": "Unimed Uberlandia",
-          "salario": 7965.0,
-          "idade": 36,
-          "tempoCasaMeses": 0
-        },
-        {
           "centroCusto": "COORDENACAO TECNOLOGIA DA INFORMACAO",
           "cargo": "ANALISTA DE SERVICE DESK JR",
           "contrato": "CLT",
@@ -6661,8 +6652,8 @@
           2963.4166666666665,
           2970.3,
           2498.5833333333335,
-          3310.4500000000007,
-          2710.6499999999996
+          3310.45,
+          2710.65
         ],
         "horasAbsenteismoLongo": [
           734.9499999999999,
@@ -6705,6 +6696,62 @@
           233,
           307,
           270
+        ],
+        "gpsValorEmpresa": [
+          0.0,
+          0.0,
+          0.0,
+          4643615.97,
+          3716152.41,
+          4343337.0600000005,
+          4947670.589999999,
+          4323198.41,
+          4387566.59,
+          4281558.48,
+          4689978.78,
+          805381.6099999999
+        ],
+        "gpsValorTerceiros": [
+          0.0,
+          0.0,
+          0.0,
+          209821.97,
+          214637.90000000002,
+          200327.02000000002,
+          198824.59,
+          194760.94,
+          192569.07,
+          187441.7,
+          191092.77000000002,
+          194630.40999999995
+        ],
+        "gpsValorSegurados": [
+          0.0,
+          0.0,
+          0.0,
+          1101902.3199999996,
+          1125254.22,
+          1147993.35,
+          1163576.9100000004,
+          1133959.9400000002,
+          1139835.6,
+          1132855.0300000003,
+          1147797.46,
+          325046.11
+        ],
+        "gpsValorDeducao": [
+          0.0,
+          0.0,
+          0.0,
+          28281.129999999997,
+          41307.61000000001,
+          30582.890000000003,
+          41777.22000000001,
+          54357.86,
+          54506.50000000001,
+          59883.08,
+          49880.37,
+          39226.84000000001
         ]
       },
       "admissoesContrato": [
@@ -8859,14 +8906,7 @@
           ]
         }
       ],
-      "gps": {
-        "competencia": "2021-08",
-        "valorEmpresa": 2283223.37,
-        "valorTerceiros": 88189.1,
-        "valorSegurados": 734685.97,
-        "valorDeducao": 9510.08,
-        "baseCalculo": 1528167.83
-      }
+      "gpsPrimeiroMesComDado": 3
     },
     {
       "id": "2",
@@ -8961,7 +9001,7 @@
         "horasAbsenteismoCurto": [
           603.5333333333333,
           527.6833333333334,
-          305.0666666666667,
+          305.06666666666666,
           0.0,
           0.0,
           0.0,
@@ -9013,6 +9053,62 @@
           0,
           0,
           0
+        ],
+        "gpsValorEmpresa": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorTerceiros": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorSegurados": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorDeducao": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       },
       "admissoesContrato": [
@@ -9737,7 +9833,7 @@
           ]
         }
       ],
-      "gps": null
+      "gpsPrimeiroMesComDado": 12
     },
     {
       "id": "3",
@@ -9749,14 +9845,14 @@
           "custo": 22694.89
         },
         {
-          "nome": "ENFERMAGEM NEXA",
-          "atual": 2,
-          "custo": 9679.32
-        },
-        {
           "nome": "ASSESSORIA DE NEGOCIOS",
           "atual": 2,
           "custo": 11137.31
+        },
+        {
+          "nome": "ENFERMAGEM NEXA",
+          "atual": 2,
+          "custo": 9679.32
         },
         {
           "nome": "CONSULTA MULTI",
@@ -10041,6 +10137,62 @@
           5,
           4,
           4
+        ],
+        "gpsValorEmpresa": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorTerceiros": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorSegurados": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorDeducao": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       },
       "admissoesContrato": [
@@ -10601,7 +10753,7 @@
           ]
         }
       ],
-      "gps": null
+      "gpsPrimeiroMesComDado": 12
     },
     {
       "id": "4",
@@ -10818,6 +10970,62 @@
           1,
           1,
           3
+        ],
+        "gpsValorEmpresa": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorTerceiros": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorSegurados": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "gpsValorDeducao": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       },
       "admissoesContrato": [
@@ -11322,7 +11530,7 @@
           ]
         }
       ],
-      "gps": null
+      "gpsPrimeiroMesComDado": 12
     }
   ]
 }
