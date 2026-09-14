@@ -15,6 +15,9 @@ export interface Colaborador {
   /** null = não é PcD. Quando preenchido, conta na cota legal (CotDef='S') - ver item 13 do
    * docstring do painel_headcount_adapter.py. */
   tipoDeficiencia: string | null
+  /** 'Masculino' | 'Feminino' | null (tipsex fora de M/F ou em branco) - ver item 14 do
+   * docstring do painel_headcount_adapter.py. */
+  sexo: string | null
 }
 
 export interface AdmissaoContrato {

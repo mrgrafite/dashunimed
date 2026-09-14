@@ -359,6 +359,24 @@ function App() {
       pcdTotal += 1
     })
 
+    // Salario medio por genero (item 14 do docstring do adapter) - exclui salario<=0 da MEDIA
+    // (PJ nao tem valsal, ver ressalva ja documentada no item 4) pra nao subestimar o grupo
+    // que tiver mais PJ; a contagem de pessoas (fem/masc) continua sem esse filtro.
+    let somaFem = 0, nSalarioFem = 0, nFem = 0
+    let somaMasc = 0, nSalarioMasc = 0, nMasc = 0
+    pessoasFiltradas.forEach((p) => {
+      if (p.sexo === 'Feminino') {
+        nFem += 1
+        if (p.salario > 0) { somaFem += p.salario; nSalarioFem += 1 }
+      } else if (p.sexo === 'Masculino') {
+        nMasc += 1
+        if (p.salario > 0) { somaMasc += p.salario; nSalarioMasc += 1 }
+      }
+    })
+    const salarioMedioFem = nSalarioFem ? somaFem / nSalarioFem : 0
+    const salarioMedioMasc = nSalarioMasc ? somaMasc / nSalarioMasc : 0
+    const gapGeneroPct = salarioMedioMasc > 0 && nSalarioFem > 0 ? ((salarioMedioMasc - salarioMedioFem) / salarioMedioMasc) * 100 : null
+
     const locMap = new Map<string, number>()
     filtrarColaboradores(pessoasBase, filters, ['localizacao']).forEach((p) => locMap.set(p.filial, (locMap.get(p.filial) ?? 0) + 1))
     let locList = [...locMap.entries()].map(([nome, count]) => ({ nome, count })).sort((a, b) => b.count - a.count)
@@ -458,6 +476,7 @@ function App() {
       absenteismoCurtoPct, absenteismoTotalPct, absenteismoCurtoMensal, absenteismoTotalMensal, faltasPct, faltasMensal,
       taxaAfastadosPct, taxaAfastadosMensal, motivoList, totalDiasMotivos, maxMotivo, empresaAfastamentoRows,
       contratoMap, pcdMap, pcdTotal, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows, empresaGpsRows,
+      salarioMedioFem, salarioMedioMasc, nFem, nMasc, gapGeneroPct,
       empresaOptionsMulti, departamentoOptionsMulti, localizacaoOptionsMulti, dataMin, dataMax,
     }
   }, [payload, filters, custoPayload, provisaoPayload])
@@ -821,6 +840,40 @@ function App() {
         }
       >
         <PcdWidget pcdMap={derivado.pcdMap} />
+      </Card>
+
+      <Card
+        title="Salário médio — Homens x Mulheres"
+        subtitle="Reage a todos os filtros · média simples (salário atual, exclui quem tem salário=0 — normalmente PJ) · sem controle por cargo/nível — o dicionário oficial recomenda mediana controlada por cargo pra disparidade salarial de verdade"
+        right={
+          derivado.gapGeneroPct != null ? (
+            <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
+              Gap ·{' '}
+              <span className="tabular" style={{ color: derivado.gapGeneroPct > 0 ? 'var(--danger)' : 'var(--text-strong)', fontWeight: 600 }}>
+                {derivado.gapGeneroPct > 0
+                  ? `mulheres ganham ${derivado.gapGeneroPct.toFixed(1)}% a menos`
+                  : `mulheres ganham ${Math.abs(derivado.gapGeneroPct).toFixed(1)}% a mais`}
+              </span>
+            </span>
+          ) : undefined
+        }
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <BarRow
+            label={`Mulheres (${num(derivado.nFem)})`}
+            valueLabel={derivado.salarioMedioFem ? brl(derivado.salarioMedioFem) : '—'}
+            fraction={derivado.salarioMedioFem / (Math.max(derivado.salarioMedioFem, derivado.salarioMedioMasc) || 1)}
+            color="var(--info)"
+            height={12}
+          />
+          <BarRow
+            label={`Homens (${num(derivado.nMasc)})`}
+            valueLabel={derivado.salarioMedioMasc ? brl(derivado.salarioMedioMasc) : '—'}
+            fraction={derivado.salarioMedioMasc / (Math.max(derivado.salarioMedioFem, derivado.salarioMedioMasc) || 1)}
+            color="var(--brand)"
+            height={12}
+          />
+        </div>
       </Card>
       </>
       )}
