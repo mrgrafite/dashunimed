@@ -12,6 +12,9 @@ export interface Colaborador {
   salario: number
   idade: number | null
   tempoCasaMeses: number | null
+  /** null = não é PcD. Quando preenchido, conta na cota legal (CotDef='S') - ver item 13 do
+   * docstring do painel_headcount_adapter.py. */
+  tipoDeficiencia: string | null
 }
 
 export interface AdmissaoContrato {

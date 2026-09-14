@@ -3,12 +3,13 @@ import { Download, X, Users, Wallet, UserPlus, UserMinus, CalendarClock, Thermom
 import { StatCard } from './components/StatCard'
 import { Card } from './components/Card'
 import { BarRow } from './components/BarRow'
-import { EvolutionChart } from './components/EvolutionChart'
+import { EvolutionAreaChart } from './components/EvolutionAreaChart'
 import { AbsenteeismoChart } from './components/AbsenteeismoChart'
 import { AfastamentosChart } from './components/AfastamentosChart'
 import { EmpresaTable } from './components/EmpresaTable'
 import { EmpresaGenericTable } from './components/EmpresaGenericTable'
 import { ContratoWidget } from './components/ContratoWidget'
+import { PcdWidget } from './components/PcdWidget'
 import { MultiSelect } from './components/MultiSelect'
 import { PeriodoFilter } from './components/PeriodoFilter'
 import { PeriodoBotoes } from './components/PeriodoBotoes'
@@ -347,6 +348,17 @@ function App() {
       contratoMap[p.contrato] = (contratoMap[p.contrato] ?? 0) + 1
     })
 
+    // PcD nao e uma dimensao de filtro (nao entra em Filters/filtrarColaboradores) - so
+    // reage aos filtros JA aplicados em `pessoasFiltradas` (Empresa/Departamento/Contrato/
+    // Localizacao), igual os outros KPIs. Ver item 13 do docstring do adapter.
+    const pcdMap: Record<string, number> = {}
+    let pcdTotal = 0
+    pessoasFiltradas.forEach((p) => {
+      if (!p.tipoDeficiencia) return
+      pcdMap[p.tipoDeficiencia] = (pcdMap[p.tipoDeficiencia] ?? 0) + 1
+      pcdTotal += 1
+    })
+
     const locMap = new Map<string, number>()
     filtrarColaboradores(pessoasBase, filters, ['localizacao']).forEach((p) => locMap.set(p.filial, (locMap.get(p.filial) ?? 0) + 1))
     let locList = [...locMap.entries()].map(([nome, count]) => ({ nome, count })).sort((a, b) => b.count - a.count)
@@ -445,7 +457,7 @@ function App() {
       totalDesligVoluntarios, totalDesligInvoluntarios, turnoverVoluntarioPct, turnoverInvoluntarioPct,
       absenteismoCurtoPct, absenteismoTotalPct, absenteismoCurtoMensal, absenteismoTotalMensal, faltasPct, faltasMensal,
       taxaAfastadosPct, taxaAfastadosMensal, motivoList, totalDiasMotivos, maxMotivo, empresaAfastamentoRows,
-      contratoMap, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows, empresaGpsRows,
+      contratoMap, pcdMap, pcdTotal, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows, empresaGpsRows,
       empresaOptionsMulti, departamentoOptionsMulti, localizacaoOptionsMulti, dataMin, dataMax,
     }
   }, [payload, filters, custoPayload, provisaoPayload])
@@ -660,12 +672,12 @@ function App() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16 }}>
-        <StatCard label="Colaboradores ativos" value={num(derivado.totalColabDept)} hint="aproximado, reage a todos os filtros" icon={<Users size={18} strokeWidth={1.75} />} />
-        <StatCard label="Custo de folha" value={brl(derivado.custoFolhaDept)} hint={derivado.colabParaMediaCusto ? `${derivado.nMesesLabel} · média ${brl(derivado.custoFolhaDept / derivado.colabParaMediaCusto)}/colab.` : ''} icon={<Wallet size={18} strokeWidth={1.75} />} />
-        <StatCard label="Admissões no período" value={num(derivado.totalAdmKpi)} hint={`${derivado.admissoesJanelaLabel} · reage ao contrato`} icon={<UserPlus size={18} strokeWidth={1.75} />} />
-        <StatCard label="Desligamentos" value={num(derivado.totalDesligKpi)} hint={derivado.desligamentosJanelaLabel} icon={<UserMinus size={18} strokeWidth={1.75} />} />
-        <StatCard label="Tempo médio de casa" value={`${derivado.tempoAnos}a ${derivado.tempoMesesResto}m`} hint={`${derivado.idadeMedia} anos de idade média`} icon={<CalendarClock size={18} strokeWidth={1.75} />} />
-        <StatCard label="Absenteísmo" value={`${derivado.absenteismoTotalPct}%`} hint={`curto ${derivado.absenteismoCurtoPct}% · ${derivado.nMesesLabel}`} icon={<Thermometer size={18} strokeWidth={1.75} />} />
+        <StatCard label="Colaboradores ativos" value={num(derivado.totalColabDept)} hint="aproximado, reage a todos os filtros" icon={<Users size={18} strokeWidth={1.75} />} tone="brand" />
+        <StatCard label="Custo de folha" value={brl(derivado.custoFolhaDept)} hint={derivado.colabParaMediaCusto ? `${derivado.nMesesLabel} · média ${brl(derivado.custoFolhaDept / derivado.colabParaMediaCusto)}/colab.` : ''} icon={<Wallet size={18} strokeWidth={1.75} />} tone="info" />
+        <StatCard label="Admissões no período" value={num(derivado.totalAdmKpi)} hint={`${derivado.admissoesJanelaLabel} · reage ao contrato`} icon={<UserPlus size={18} strokeWidth={1.75} />} tone="success" />
+        <StatCard label="Desligamentos" value={num(derivado.totalDesligKpi)} hint={derivado.desligamentosJanelaLabel} icon={<UserMinus size={18} strokeWidth={1.75} />} tone="danger" />
+        <StatCard label="Tempo médio de casa" value={`${derivado.tempoAnos}a ${derivado.tempoMesesResto}m`} hint={`${derivado.idadeMedia} anos de idade média`} icon={<CalendarClock size={18} strokeWidth={1.75} />} tone="neutral" />
+        <StatCard label="Absenteísmo" value={`${derivado.absenteismoTotalPct}%`} hint={`curto ${derivado.absenteismoCurtoPct}% · ${derivado.nMesesLabel}`} icon={<Thermometer size={18} strokeWidth={1.75} />} tone="warning" />
       </div>
 
       <div style={{ display: 'flex', gap: 16 }}>
@@ -675,6 +687,7 @@ function App() {
             value={num(Math.round(derivado.headcountMedioPeriodo))}
             hint={`(HC inicial + HC final do mês) / 2 · ${derivado.nMesesLabel}`}
             icon={<Gauge size={18} strokeWidth={1.75} />}
+            tone="brand"
           />
         </div>
         <div style={{ width: 260 }}>
@@ -683,6 +696,7 @@ function App() {
             value={`${derivado.turnoverPct}%`}
             hint="(Admissões + Desligamentos) / 2 ÷ HC Médio"
             icon={<Repeat size={18} strokeWidth={1.75} />}
+            tone="warning"
           />
         </div>
       </div>
@@ -690,6 +704,7 @@ function App() {
       <Card
         title="Evolução — admissões x desligamentos"
         subtitle={`${derivado.nMesesLabel} · admissões reagem ao contrato, desligamentos não · fonte bronze (espelho do HCM)`}
+        radius="var(--radius-2xl)"
         right={
           <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
@@ -706,7 +721,7 @@ function App() {
           </div>
         }
       >
-        <EvolutionChart meses={derivado.labels} adm={derivado.adm} deslig={derivado.deslig} />
+        <EvolutionAreaChart meses={derivado.labels} adm={derivado.adm} deslig={derivado.deslig} />
       </Card>
 
       <Card title="Turnover Voluntário x Involuntário" subtitle={`${derivado.nMesesLabel} · Desligamentos [tipo] ÷ HC Médio × 100 · classificação oficial por causa de demissão (planilha "Motivo Desligamentos") · os dois somam exatamente o KPI "Desligamentos"`} bodyPadding="18px 20px">
@@ -717,6 +732,7 @@ function App() {
               value={`${derivado.turnoverVoluntarioPct}%`}
               hint={`Pedido de demissão do colaborador · ${num(derivado.totalDesligVoluntarios)} desligamentos`}
               icon={<LogOut size={18} strokeWidth={1.75} />}
+              tone="warning"
             />
           </div>
           <div style={{ flex: '1 1 260px' }}>
@@ -725,6 +741,7 @@ function App() {
               value={`${derivado.turnoverInvoluntarioPct}%`}
               hint={`Desligamento por decisão da empresa · ${num(derivado.totalDesligInvoluntarios)} desligamentos`}
               icon={<UserX size={18} strokeWidth={1.75} />}
+              tone="neutral"
             />
           </div>
         </div>
@@ -792,6 +809,19 @@ function App() {
           </div>
         </Card>
       </div>
+
+      <Card
+        title="PcD — colaboradores com deficiência"
+        subtitle="Reage a todos os filtros · CotDef='S' (flag oficial do Senior p/ cota legal), inclui beneficiários reabilitados"
+        right={
+          <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
+            Total · <span className="tabular" style={{ color: 'var(--text-strong)', fontWeight: 600 }}>{num(derivado.pcdTotal)}</span>
+            {derivado.totalColabDept ? ` (${((derivado.pcdTotal / derivado.totalColabDept) * 100).toFixed(1)}% do headcount)` : ''}
+          </span>
+        }
+      >
+        <PcdWidget pcdMap={derivado.pcdMap} />
+      </Card>
       </>
       )}
     </div>

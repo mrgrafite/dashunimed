@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Wallet, Landmark, HeartHandshake, DoorOpen, PiggyBank } from 'lucide-react'
-import { StatCard } from './StatCard'
+import { StatCard, type StatCardTrend } from './StatCard'
 import { Card } from './Card'
 import { BarRow } from './BarRow'
 import { CustoChart } from './CustoChart'
@@ -65,13 +65,13 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   // igual em qualquer tamanho de janela, inclusive no modo "mes especifico" (1 so indice).
   const idxUltimo = indices[indices.length - 1] ?? -1
   const idxAnterior = idxUltimo - 1
-  const variacao = (campo: 'folha' | 'encargos' | 'beneficio' | 'rescisao') => {
+  const variacao = (campo: 'folha' | 'encargos' | 'beneficio' | 'rescisao'): StatCardTrend | undefined => {
     const atual = totalNoIndice(campo, idxUltimo)
     const anterior = totalNoIndice(campo, idxAnterior)
-    if (!anterior) return ''
+    if (!anterior) return undefined
     const pct = ((atual - anterior) / anterior) * 100
-    const sinal = pct >= 0 ? '+' : ''
-    return `${sinal}${pct.toFixed(1)}% vs mês anterior`
+    // custo: aumento = ruim (vermelho), queda = bom (verde) - convenção de dashboard de despesas
+    return { value: pct, label: 'vs mês anterior', invert: true }
   }
 
   // CLC vem da contabilizacao real (bronze_rhp_r048ctb), que cobre os 12 meses cheios -
@@ -178,10 +178,10 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
       )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
-        <StatCard label="Custo de folha" value={brl(totalFolha)} hint={variacao('folha')} icon={<Wallet size={18} strokeWidth={1.75} />} />
-        <StatCard label="Encargos" value={brl(totalEncargos)} hint={variacao('encargos')} icon={<Landmark size={18} strokeWidth={1.75} />} />
-        <StatCard label="Benefícios" value={brl(totalBeneficio)} hint={variacao('beneficio')} icon={<HeartHandshake size={18} strokeWidth={1.75} />} />
-        <StatCard label="Rescisão" value={brl(totalRescisao)} hint={variacao('rescisao')} icon={<DoorOpen size={18} strokeWidth={1.75} />} />
+        <StatCard label="Custo de folha" value={brl(totalFolha)} trend={variacao('folha')} icon={<Wallet size={18} strokeWidth={1.75} />} tone="brand" />
+        <StatCard label="Encargos" value={brl(totalEncargos)} trend={variacao('encargos')} icon={<Landmark size={18} strokeWidth={1.75} />} tone="info" />
+        <StatCard label="Benefícios" value={brl(totalBeneficio)} trend={variacao('beneficio')} icon={<HeartHandshake size={18} strokeWidth={1.75} />} tone="success" />
+        <StatCard label="Rescisão" value={brl(totalRescisao)} trend={variacao('rescisao')} icon={<DoorOpen size={18} strokeWidth={1.75} />} tone="danger" />
       </div>
 
       <Card

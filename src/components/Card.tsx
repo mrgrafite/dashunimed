@@ -6,15 +6,17 @@ interface CardProps {
   right?: ReactNode
   children: ReactNode
   bodyPadding?: string
+  /** 'var(--radius-2xl)' para destacar um card como surface principal (ex.: gráfico hero) */
+  radius?: string
 }
 
-export function Card({ title, subtitle, right, children, bodyPadding = '18px 20px' }: CardProps) {
+export function Card({ title, subtitle, right, children, bodyPadding = '18px 20px', radius = 'var(--radius-card)' }: CardProps) {
   return (
     <div
       style={{
         background: 'var(--surface-card)',
         border: '1px solid var(--border-subtle)',
-        borderRadius: 'var(--radius-card)',
+        borderRadius: radius,
         boxShadow: 'var(--shadow-sm)',
         overflow: 'hidden',
       }}
