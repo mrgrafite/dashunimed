@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Download, X, Users, Wallet, UserPlus, UserMinus, CalendarClock, Thermometer, Gauge, Repeat, LogOut, UserX } from 'lucide-react'
+import { Download, X, Users, Wallet, UserPlus, UserMinus, CalendarClock, Thermometer, Gauge, Repeat, LogOut, UserX, GraduationCap, Clock, UsersRound, Smile } from 'lucide-react'
 import { StatCard } from './components/StatCard'
 import { Card } from './components/Card'
 import { BarRow } from './components/BarRow'
@@ -10,11 +10,13 @@ import { EmpresaTable } from './components/EmpresaTable'
 import { EmpresaGenericTable } from './components/EmpresaGenericTable'
 import { ContratoWidget } from './components/ContratoWidget'
 import { PcdWidget } from './components/PcdWidget'
+import { HierarquiaWidget } from './components/HierarquiaWidget'
+import { TreinamentoTipoWidget } from './components/TreinamentoTipoWidget'
 import { MultiSelect } from './components/MultiSelect'
 import { PeriodoFilter } from './components/PeriodoFilter'
 import { PeriodoBotoes } from './components/PeriodoBotoes'
 import { CustoFolhaTab } from './components/CustoFolhaTab'
-import type { Payload, Filters, Colaborador, Empresa, EventoContrato, CustoFolhaPayload, ProvisaoPayload } from './types'
+import type { Payload, Filters, Colaborador, Empresa, EventoContrato, CustoFolhaPayload, ProvisaoPayload, TreinamentoPayload } from './types'
 
 const num = (n: number) => n.toLocaleString('pt-BR')
 const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -86,6 +88,7 @@ function App() {
   const [payload, setPayload] = useState<Payload | null>(null)
   const [custoPayload, setCustoPayload] = useState<CustoFolhaPayload | null>(null)
   const [provisaoPayload, setProvisaoPayload] = useState<ProvisaoPayload | null>(null)
+  const [treinamentoPayload, setTreinamentoPayload] = useState<TreinamentoPayload | null>(null)
   const [erro, setErro] = useState<string | null>(null)
   const [filters, setFilters] = useState<Filters>(FILTROS_PADRAO)
 
@@ -112,6 +115,14 @@ function App() {
         return r.json()
       })
       .then(setProvisaoPayload)
+      .catch(() => {})
+
+    fetch(`${import.meta.env.BASE_URL}treinamento.json`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then(setTreinamentoPayload)
       .catch(() => {})
   }, [])
 
@@ -359,6 +370,13 @@ function App() {
       pcdTotal += 1
     })
 
+    // Nivel de hierarquia do posto (item 15 do docstring do adapter) - mesmo padrao do PcD:
+    // nao e dimensao de filtro, so reage aos filtros ja aplicados em `pessoasFiltradas`.
+    const nivelHierarquiaMap: Record<string, number> = {}
+    pessoasFiltradas.forEach((p) => {
+      nivelHierarquiaMap[p.nivelHierarquia] = (nivelHierarquiaMap[p.nivelHierarquia] ?? 0) + 1
+    })
+
     // Salario medio por genero (item 14 do docstring do adapter) - exclui salario<=0 da MEDIA
     // (PJ nao tem valsal, ver ressalva ja documentada no item 4) pra nao subestimar o grupo
     // que tiver mais PJ; a contagem de pessoas (fem/masc) continua sem esse filtro.
@@ -476,7 +494,7 @@ function App() {
       absenteismoCurtoPct, absenteismoTotalPct, absenteismoCurtoMensal, absenteismoTotalMensal, faltasPct, faltasMensal,
       taxaAfastadosPct, taxaAfastadosMensal, motivoList, totalDiasMotivos, maxMotivo, empresaAfastamentoRows,
       contratoMap, pcdMap, pcdTotal, locList, maxLoc, empresaRows, empresaCustoDetalhado, empresaProvisaoRows, empresaGpsRows,
-      salarioMedioFem, salarioMedioMasc, nFem, nMasc, gapGeneroPct,
+      salarioMedioFem, salarioMedioMasc, nFem, nMasc, gapGeneroPct, nivelHierarquiaMap,
       empresaOptionsMulti, departamentoOptionsMulti, localizacaoOptionsMulti, dataMin, dataMax,
     }
   }, [payload, filters, custoPayload, provisaoPayload])
@@ -843,6 +861,13 @@ function App() {
       </Card>
 
       <Card
+        title="Cargos por Nível de Hierarquia"
+        subtitle="Reage a todos os filtros · posto de trabalho (R017POS/R017CAR, vinculado via EstPos/PosTra do R034FUN) → nível de hierarquia (R017NHP)"
+      >
+        <HierarquiaWidget niveisMap={derivado.nivelHierarquiaMap} />
+      </Card>
+
+      <Card
         title="Salário médio — Homens x Mulheres"
         subtitle="Reage a todos os filtros · média simples (salário atual, exclui quem tem salário=0 — normalmente PJ) · sem controle por cargo/nível — o dicionário oficial recomenda mediana controlada por cargo pra disparidade salarial de verdade"
         right={
@@ -875,6 +900,34 @@ function App() {
           />
         </div>
       </Card>
+
+      {treinamentoPayload && (
+        <Card
+          title="Treinamentos"
+          subtitle={`Dado consolidado do grupo (4 empresas) · ${treinamentoPayload.mesesLabel} · não reage a filtros — fonte (silver_senior_rh_treinamento) não tem empresa/departamento`}
+          right={
+            <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
+              {num(treinamentoPayload.totalSessoes)} sessões · {num(treinamentoPayload.totalParticipantes)} participações
+            </span>
+          }
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+              <StatCard label="Horas treinadas" value={`${num(treinamentoPayload.totalHoras)}h`} hint={treinamentoPayload.mesesLabel} icon={<Clock size={18} strokeWidth={1.75} />} tone="brand" />
+              <StatCard label="Horas por colaborador" value={`${treinamentoPayload.horasPorColaborador}h`} hint="Horas ÷ HC médio do grupo" icon={<GraduationCap size={18} strokeWidth={1.75} />} tone="info" />
+              <StatCard label="Taxa de participação" value={`${treinamentoPayload.taxaParticipacaoPct}%`} hint="Presentes ÷ previstos" icon={<UsersRound size={18} strokeWidth={1.75} />} tone="success" />
+              <StatCard
+                label="Avaliação de reação"
+                value={treinamentoPayload.avaliacaoReacaoMedia != null ? `${treinamentoPayload.avaliacaoReacaoMedia}%` : '—'}
+                hint="Amostra pequena — poucas sessões avaliadas"
+                icon={<Smile size={18} strokeWidth={1.75} />}
+                tone="warning"
+              />
+            </div>
+            <TreinamentoTipoWidget porTipo={treinamentoPayload.porTipo} />
+          </div>
+        </Card>
+      )}
       </>
       )}
     </div>

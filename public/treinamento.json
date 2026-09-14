@@ -1,0 +1,16 @@
+{
+  "competenciaIni": 202601,
+  "competenciaFim": 202608,
+  "mesesLabel": "Jan/26–Ago/26",
+  "totalHoras": 6414.2,
+  "horasPorColaborador": 9.79,
+  "taxaParticipacaoPct": 86.1,
+  "avaliacaoReacaoMedia": 98.6,
+  "totalParticipantes": 3763.0,
+  "totalSessoes": 149,
+  "porTipo": {
+    "TECNICO": 2880.8,
+    "TECNICO E COMPORTAMENTAL": 127.5,
+    "COMPORTAMENTAL": 3406.0
+  }
+}

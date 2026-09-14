@@ -18,6 +18,9 @@ export interface Colaborador {
   /** 'Masculino' | 'Feminino' | null (tipsex fora de M/F ou em branco) - ver item 14 do
    * docstring do painel_headcount_adapter.py. */
   sexo: string | null
+  /** Nível de hierarquia do posto de trabalho (bronze_rhp_r017car.codhie → r017nhp), sempre
+   * preenchido ("Sem nível cadastrado" quando não há característica vigente) - ver item 15. */
+  nivelHierarquia: string
 }
 
 export interface AdmissaoContrato {
@@ -144,6 +147,22 @@ export interface ProvisaoPayload {
   meses: string[]
   tipos: string[]
   empresas: EmpresaProvisao[]
+}
+
+/** Dado consolidado do GRUPO (4 empresas) - fonte silver_senior_rh_treinamento NÃO tem
+ * empresa/departamento, não reage aos filtros da aba Headcount. Ver treinamento_adapter.py. */
+export interface TreinamentoPayload {
+  competenciaIni: number | null
+  competenciaFim: number | null
+  mesesLabel: string
+  totalHoras: number
+  horasPorColaborador: number
+  taxaParticipacaoPct: number
+  /** null quando nenhuma sessão tem avaliação de reação preenchida (campo esparso). */
+  avaliacaoReacaoMedia: number | null
+  totalParticipantes: number
+  totalSessoes: number
+  porTipo: Record<string, number>
 }
 
 export interface Filters {
