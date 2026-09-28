@@ -69,6 +69,9 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
     const atual = totalNoIndice(campo, idxUltimo)
     const anterior = totalNoIndice(campo, idxAnterior)
     if (!anterior) return undefined
+    // Encargos (BasEmp da GPS/R054GRP) so existe depois que a guia do mes e gerada - mes
+    // corrente zerado e "guia ainda nao gerada", nao queda de 100%.
+    if (campo === 'encargos' && !atual) return undefined
     const pct = ((atual - anterior) / anterior) * 100
     // custo: aumento = ruim (vermelho), queda = bom (verde) - convenção de dashboard de despesas
     return { value: pct, label: 'vs mês anterior', invert: true }
@@ -94,12 +97,19 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   // corte de Jan/2026 que a silver tem), por isso usa os mesmos `indicesClc` (mesma logica de
   // janela cheia). `sldatu` e saldo acumulado (ponto no tempo) - o "saldo atual" do KPI usa
   // so o ULTIMO mes da janela (ou o mes especifico escolhido), nunca soma.
-  const labelsProvisao = indicesClc.map((i) => payload.meses[i])
   const empsProvisao = (provisaoPayload?.empresas ?? []).filter((e) => empresaSel.length === 0 || empresaSel.includes(e.id))
   const tipos = provisaoPayload?.tipos ?? []
+  // Mes corrente sem calculo de provisao ainda (r146prv so tem ate o ultimo mes fechado) viria
+  // como saldo 0 - corta a janela no ultimo mes com saldo, em vez de mostrar queda pra R$0.
+  const saldoTotalNoIndice = (idx: number) =>
+    tipos.reduce((s, tipo) => s + empsProvisao.reduce((t, e) => t + Math.abs(e.provisao[tipo]?.sldatu[idx] ?? 0), 0), 0)
+  let fimProvisao = indicesClc.length
+  while (fimProvisao > 1 && !saldoTotalNoIndice(indicesClc[fimProvisao - 1])) fimProvisao--
+  const indicesProvisao = indicesClc.slice(0, fimProvisao)
+  const labelsProvisao = indicesProvisao.map((i) => payload.meses[i])
   const saldoPorTipoMensal = new Map<string, number[]>()
   tipos.forEach((tipo) => {
-    const serie = indicesClc.map((idx) => empsProvisao.reduce((s, e) => s + (e.provisao[tipo]?.sldatu[idx] ?? 0), 0))
+    const serie = indicesProvisao.map((idx) => empsProvisao.reduce((s, e) => s + (e.provisao[tipo]?.sldatu[idx] ?? 0), 0))
     saldoPorTipoMensal.set(tipo, serie)
   })
   const saldoAtualPorTipo = new Map<string, number>()
@@ -179,14 +189,14 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
         <StatCard label="Custo de folha" value={brl(totalFolha)} trend={variacao('folha')} icon={<Wallet size={18} strokeWidth={1.75} />} tone="brand" />
-        <StatCard label="Encargos" value={brl(totalEncargos)} trend={variacao('encargos')} icon={<Landmark size={18} strokeWidth={1.75} />} tone="info" />
+        <StatCard label="Encargos" value={brl(totalEncargos)} hint={totalNoIndice('encargos', idxUltimo) ? 'Base empresa da GPS (BasEmp)' : `BasEmp da GPS · guia de ${payload.meses[idxUltimo] ?? ''} ainda não gerada`} trend={variacao('encargos')} icon={<Landmark size={18} strokeWidth={1.75} />} tone="info" />
         <StatCard label="Benefícios" value={brl(totalBeneficio)} trend={variacao('beneficio')} icon={<HeartHandshake size={18} strokeWidth={1.75} />} tone="success" />
         <StatCard label="Rescisão" value={brl(totalRescisao)} trend={variacao('rescisao')} icon={<DoorOpen size={18} strokeWidth={1.75} />} tone="danger" />
       </div>
 
       <Card
         title="Custo total de pessoal"
-        subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labels.length} meses`} · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado`}
+        subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labels.length} meses`} · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado; Encargos = BasEmp da GPS (R054GRP)`}
         right={
           <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
             Total do período · <span className="tabular" style={{ color: 'var(--text-strong)', fontWeight: 600 }}>{brl(totalGeral)}</span>

@@ -119,6 +119,11 @@ export function StatCard({ label, value, hint, icon, tone = 'brand', trend }: St
           <span style={{ font: 'var(--fw-regular) var(--text-caption)/1.3 var(--font-sans)', color: 'var(--text-faint)' }}>
             {trend.label}
           </span>
+          {hint && (
+            <span style={{ flexBasis: '100%', font: 'var(--fw-regular) var(--text-caption)/1.3 var(--font-sans)', color: 'var(--text-faint)' }}>
+              {hint}
+            </span>
+          )}
         </div>
       ) : (
         hint && (
