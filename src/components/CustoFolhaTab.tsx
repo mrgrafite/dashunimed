@@ -24,13 +24,23 @@ const OPCOES_GRAFICO: [TipoGrafico, string][] = [
 const brl = (n: number) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 const OPCOES_MESES = [3, 6, 12]
-type ModoPeriodo = 'meses' | 'especifico'
+type ModoPeriodo = 'meses' | 'especifico' | 'personalizado'
+
+const ESTILO_SELECT = {
+  height: 36, padding: '0 10px', borderRadius: 'var(--radius-control)',
+  border: '1px solid var(--border-subtle)', background: 'var(--surface-card)',
+  color: 'var(--text-strong)', font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
+} as const
+
+const intervalo = (ini: number, fim: number) => Array.from({ length: Math.max(0, fim - ini + 1) }, (_, i) => ini + i)
 
 export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolhaPayload; provisaoPayload: ProvisaoPayload | null }) {
   const [empresaSel, setEmpresaSel] = useState<string[]>([])
   const [nMeses, setNMeses] = useState(12)
   const [modoPeriodo, setModoPeriodo] = useState<ModoPeriodo>('meses')
   const [mesEspecificoIdx, setMesEspecificoIdx] = useState(payload.meses.length - 1)
+  const [persDeIdx, setPersDeIdx] = useState(Math.max(0, payload.meses.length - 3))
+  const [persAteIdx, setPersAteIdx] = useState(payload.meses.length - 1)
   const [tipoGrafico, setTipoGrafico] = useState<TipoGrafico>('empilhado')
 
   const empresaOptions = payload.empresas.map((e) => ({ value: e.id, label: e.nome }))
@@ -40,10 +50,22 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   // 1 unico indice (mesEspecificoIdx) em vez de uma faixa de N meses - todo o resto da aba
   // (KPIs, grafico, CLC, Provisao) usa os MESMOS `indices` computados aqui, entao passa a
   // refletir so aquele mes automaticamente.
-  const inicioJanela = Math.max(12 - nMeses, payload.primeiroMesComDado)
-  const indices = modoPeriodo === 'especifico' ? [mesEspecificoIdx] : Array.from({ length: Math.max(0, 12 - inicioJanela) }, (_, i) => inicioJanela + i)
+  // "Personalizado" (pedido 2026-09-28): faixa De/Ate escolhida pelo usuario. Os 3 modos viram
+  // uma janela [janelaIni, janelaFim] de indices 0-11 - o resto da aba so enxerga essa janela.
+  const janelaIni =
+    modoPeriodo === 'especifico' ? mesEspecificoIdx : modoPeriodo === 'personalizado' ? Math.min(persDeIdx, persAteIdx) : 12 - nMeses
+  const janelaFim =
+    modoPeriodo === 'especifico' ? mesEspecificoIdx : modoPeriodo === 'personalizado' ? Math.max(persDeIdx, persAteIdx) : 11
+  const inicioJanela = Math.max(janelaIni, payload.primeiroMesComDado)
+  const indices = modoPeriodo === 'especifico' ? [mesEspecificoIdx] : intervalo(inicioJanela, janelaFim)
   const labels = indices.map((i) => payload.meses[i])
-  const cobreturaLimitada = modoPeriodo === 'meses' && inicioJanela > 12 - nMeses
+  const rotuloJanela = (ls: string[]) =>
+    modoPeriodo === 'especifico'
+      ? `referência: ${payload.meses[mesEspecificoIdx]}`
+      : modoPeriodo === 'personalizado'
+        ? ls.length > 1 ? `${ls[0]} a ${ls[ls.length - 1]}` : `referência: ${ls[0] ?? '—'}`
+        : `${ls.length} meses`
+  const cobreturaLimitada = modoPeriodo !== 'especifico' && inicioJanela > janelaIni
   const semDadoMesEspecifico = modoPeriodo === 'especifico' && mesEspecificoIdx < payload.primeiroMesComDado
 
   const totalNoIndice = (campo: 'folha' | 'encargos' | 'beneficio' | 'rescisao', idx: number) =>
@@ -81,7 +103,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
   // ao contrario de folha/encargos/beneficio/rescisao (silver, so a partir de Jan/2026),
   // por isso usa os mesmos `indices` (ja sem o corte de `inicioJanela`/`primeiroMesComDado`
   // no modo "meses", e o mesmo mes unico no modo "especifico").
-  const indicesClc = modoPeriodo === 'especifico' ? [mesEspecificoIdx] : Array.from({ length: nMeses }, (_, i) => 12 - nMeses + i)
+  const indicesClc = intervalo(janelaIni, janelaFim)
   const clcMap = new Map<string, number>()
   emps.forEach((e) =>
     e.clc.forEach((c) => {
@@ -156,21 +178,63 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
               Mês específico
             </button>
             {modoPeriodo === 'especifico' && (
-              <select
-                value={mesEspecificoIdx}
-                onChange={(e) => setMesEspecificoIdx(Number(e.target.value))}
-                style={{
-                  height: 36, padding: '0 10px', borderRadius: 'var(--radius-control)',
-                  border: '1px solid var(--border-subtle)', background: 'var(--surface-card)',
-                  color: 'var(--text-strong)', font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
-                }}
-              >
+              <select value={mesEspecificoIdx} onChange={(e) => setMesEspecificoIdx(Number(e.target.value))} style={ESTILO_SELECT}>
                 {payload.meses.map((m, i) => (
                   <option key={m} value={i}>
                     {m}
                   </option>
                 ))}
               </select>
+            )}
+            <button
+              onClick={() => setModoPeriodo('personalizado')}
+              style={{
+                height: 36, padding: '0 14px', borderRadius: 'var(--radius-control)',
+                border: modoPeriodo === 'personalizado' ? '1px solid var(--brand)' : '1px solid var(--border-subtle)',
+                background: modoPeriodo === 'personalizado' ? 'var(--brand-soft)' : 'var(--surface-card)',
+                color: modoPeriodo === 'personalizado' ? 'var(--brand)' : 'var(--text-body)',
+                font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', cursor: 'pointer',
+              }}
+            >
+              Personalizado
+            </button>
+            {modoPeriodo === 'personalizado' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>De</span>
+                <select
+                  aria-label="Referência inicial"
+                  value={persDeIdx}
+                  onChange={(e) => {
+                    const v = Number(e.target.value)
+                    setPersDeIdx(v)
+                    if (v > persAteIdx) setPersAteIdx(v)
+                  }}
+                  style={ESTILO_SELECT}
+                >
+                  {payload.meses.map((m, i) => (
+                    <option key={m} value={i}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+                <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>até</span>
+                <select
+                  aria-label="Referência final"
+                  value={persAteIdx}
+                  onChange={(e) => {
+                    const v = Number(e.target.value)
+                    setPersAteIdx(v)
+                    if (v < persDeIdx) setPersDeIdx(v)
+                  }}
+                  style={ESTILO_SELECT}
+                >
+                  {payload.meses.map((m, i) => (
+                    <option key={m} value={i}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
         </div>
@@ -196,7 +260,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
 
       <Card
         title="Custo total de pessoal"
-        subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labels.length} meses`} · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado; Encargos = BasEmp da GPS (R054GRP)`}
+        subtitle={`${rotuloJanela(labels)} · Folha + Encargos + Benefícios + Rescisão · fonte: folha de pagamento (silver), deduplicado; Encargos = BasEmp da GPS (R054GRP)`}
         right={
           <span style={{ font: 'var(--fw-medium) var(--text-body-sm)/1 var(--font-sans)', color: 'var(--text-muted)' }}>
             Total do período · <span className="tabular" style={{ color: 'var(--text-strong)', fontWeight: 600 }}>{brl(totalGeral)}</span>
@@ -243,7 +307,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
         )}
       </Card>
 
-      <Card title="Custo de folha por classificação (CLC)" subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${nMeses} meses`} · contabilização real (lançamentos a débito) · fonte: bronze_rhp_r048ctb + r048clc`}>
+      <Card title="Custo de folha por classificação (CLC)" subtitle={`${rotuloJanela(indicesClc.map((i) => payload.meses[i]))} · contabilização real (lançamentos a débito) · fonte: bronze_rhp_r048ctb + r048clc`}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxHeight: 480, overflow: 'auto' }}>
           {clcList.map((c) => (
             <BarRow key={c.nome} label={c.nome} valueLabel={brl(c.valor)} fraction={c.valor / maxClc} />
@@ -268,7 +332,7 @@ export function CustoFolhaTab({ payload, provisaoPayload }: { payload: CustoFolh
 
           <Card
             title="Provisão de Férias/13º/PLR"
-            subtitle={`${modoPeriodo === 'especifico' ? `referência: ${payload.meses[mesEspecificoIdx]}` : `${labelsProvisao.length} meses`} · saldo acumulado (não é custo mensal, é o passivo provisionado) · fonte: bronze_rhp_r146prv, módulo de Provisão`}
+            subtitle={`${rotuloJanela(labelsProvisao)} · saldo acumulado (não é custo mensal, é o passivo provisionado) · fonte: bronze_rhp_r146prv, módulo de Provisão`}
           >
             <ProvisaoChart
               meses={labelsProvisao}
